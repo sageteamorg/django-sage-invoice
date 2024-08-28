@@ -169,3 +169,4 @@ manage.py
 # Ignore all migrations files except __init__.py
 **/migrations/*
 !**/migrations/__init__.py
+bandit_report.txt
