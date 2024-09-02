@@ -18,6 +18,7 @@ django = [
 jinja2 = "^3.1.4"
 pillow = "^10.4.0"
 django-sage-tools = "^0.2.2"
+django-import-export = "^4.1.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
@@ -41,7 +42,7 @@ docs = ["sphinx", "sphinx-autobuild", "sphinx-rtd-theme"]
 
 [tool.pytest.ini_options]
 addopts = "--cov --cov-report=term-missing --cov-report=html --cov-fail-under=90"
-DJANGO_SETTINGS_MODULE = "kerenl.settings"
+DJANGO_SETTINGS_MODULE = "kernel.settings"
 python_files = ["tests.py", "test_*.py"]
 testpaths = ["tests"]
 norecursedirs = [
