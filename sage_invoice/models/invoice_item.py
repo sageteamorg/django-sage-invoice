@@ -11,6 +11,7 @@ class InvoiceItem(models.Model):
     )
     quantity = models.PositiveIntegerField(
         verbose_name=_("Quantity"),
+        default=1,
         help_text=_("The quantity of the item."),
         db_comment="The quantity of the invoice item",
     )

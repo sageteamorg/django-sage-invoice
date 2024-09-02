@@ -1,8 +1,6 @@
-from importlib.util import find_spec
 
 import pytest
 from django.conf import settings
-from django.core.checks import Error
 
 from sage_invoice.check import (
     check_installed_apps,
