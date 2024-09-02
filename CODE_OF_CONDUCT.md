@@ -30,10 +30,10 @@ Thank you for your interest in contributing to our package! This document outlin
 6. **Run Code Quality Checks**: Ensure code quality with pre-commit, Ruff, and Pylint.
     ```bash
     pre-commit run --all-files
-    ruff check django_sage_invoice --fix
-    black django_sage_invoice/
-    isort django_sage_invoice/
-    pylint django_sage_invoice
+    ruff check sage_invoice --fix
+    black sage_invoice/
+    isort sage_invoice/
+    pylint sage_invoice
     ```
 
 7. **Run Tests**: Ensure all tests pass using Poetry.
