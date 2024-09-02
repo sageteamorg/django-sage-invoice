@@ -67,9 +67,12 @@ class QuotationService:
         logger.info("Rendering quotation")
         invoice = queryset.first()
         context = self.render_contax(queryset)
+        is_receipt = invoice.receipt
         template_number = "".join(filter(str.isdigit, invoice.template_choice))
         logger.info("Selected template number: %s", template_number)
-        selected_template = self.template_discovery.get_template_path(template_number)
+        selected_template = self.template_discovery.get_template_path(
+            template_number, is_receipt
+        )
         if not selected_template:
             logger.error("Template %s not found", invoice.template_choice)
             raise TemplateNotFound(f"Template {invoice.template_choice} not found.")
@@ -124,6 +127,7 @@ class QuotationService:
             "invoice_date": invoice.invoice_date,
             "customer_name": invoice.customer_name,
             "customer_email": invoice.customer_email,
+            "due_date": invoice.due_date,
             "status": invoice.status,
             "notes": invoice.notes,
             "logo_url": invoice.logo.url if invoice.logo else None,

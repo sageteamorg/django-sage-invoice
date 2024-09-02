@@ -36,6 +36,12 @@ class Invoice(TitleSlugMixin):
         help_text=_("The current status of the invoice (Paid, Unpaid)."),
         db_comment="Current status of the invoice (Paid, Unpaid)",
     )
+    receipt = models.BooleanField(
+        verbose_name=_("Receipt"),
+        default=False,
+        help_text=_("Is this a receipt or an invoice"),
+        db_comment="Check if this invoice is a receipt",
+    )
     notes = models.TextField(
         verbose_name=_("Notes"),
         blank=True,

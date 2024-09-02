@@ -42,6 +42,7 @@ class TestQuotationService:
         invoice.logo.url = "test_logo_url"
         invoice.signature.url = "test_signature_url"
         invoice.stamp.url = "test_stamp_url"
+        invoice.receipt = False
 
         with mock.patch("jinja2.Environment.get_template") as mock_get_template:
             mock_template = mock.Mock()
@@ -125,7 +126,7 @@ class TestQuotationService:
         invoice.logo.url = "test_logo_url"
         invoice.signature.url = "test_signature_url"
         invoice.stamp.url = "test_stamp_url"
-
+        invoice.receipt = False
         with mock.patch("jinja2.Environment.get_template") as mock_get_template:
             mock_template = mock.Mock()
             mock_template.render.return_value = "Rendered content"
