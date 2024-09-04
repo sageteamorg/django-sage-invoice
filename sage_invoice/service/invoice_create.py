@@ -17,14 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 class QuotationService:
-    """
-    Service class to handle the generation and rendering of quotations.
-    """
+    """Service class to handle the generation and rendering of quotations."""
 
     def __init__(self) -> None:
-        """
-        Initialize the QuotationService with the template discovery and Jinja2
-        """
+        """Initialize the QuotationService with the template discovery and
+        Jinja2."""
         logger.info("Initializing QuotationService")
         self.template_discovery = JinjaTemplateDiscovery(
             models_dir=getattr(settings, "MODEL_TEMPLATE", "sage_invoice")
@@ -38,12 +35,12 @@ class QuotationService:
         )
 
     def generate_tracking_code(self, user_input: str, creation_date: datetime) -> str:
-        """
-        Generate a unique tracking code based on user input
-        and the creation date.
+        """Generate a unique tracking code based on user input and the creation
+        date.
 
         Returns:
             str: A unique tracking code.
+
         """
         date_str = creation_date.strftime("%Y%m%d")
         random_number = random.randint(1000, 9999)
@@ -52,8 +49,7 @@ class QuotationService:
         return tracking_code
 
     def render_quotation(self, queryset: QuerySet) -> str:
-        """
-        Render the quotation for the given queryset.
+        """Render the quotation for the given queryset.
 
         Args:
             queryset (QuerySet): A queryset containing the invoice to render.
@@ -63,13 +59,17 @@ class QuotationService:
 
         Raises:
             TemplateNotFound: If the selected template is not found.
+
         """
         logger.info("Rendering quotation")
         invoice = queryset.first()
         context = self.render_contax(queryset)
+        is_receipt = invoice.receipt
         template_number = "".join(filter(str.isdigit, invoice.template_choice))
         logger.info("Selected template number: %s", template_number)
-        selected_template = self.template_discovery.get_template_path(template_number)
+        selected_template = self.template_discovery.get_template_path(
+            template_number, is_receipt
+        )
         if not selected_template:
             logger.error("Template %s not found", invoice.template_choice)
             raise TemplateNotFound(f"Template {invoice.template_choice} not found.")
@@ -79,14 +79,14 @@ class QuotationService:
         return template.render(context)
 
     def render_contax(self, queryset: QuerySet) -> Dict[str, Any]:
-        """
-        Prepare the context data for rendering a quotation.
+        """Prepare the context data for rendering a quotation.
 
         Args:
             queryset (QuerySet): A queryset containing the invoice(s).
 
         Returns:
             Dict[str, Any]: The context data for rendering the quotation.
+
         """
         logger.info("Preparing context data for quotation")
         invoice = queryset.first()
@@ -124,6 +124,7 @@ class QuotationService:
             "invoice_date": invoice.invoice_date,
             "customer_name": invoice.customer_name,
             "customer_email": invoice.customer_email,
+            "due_date": invoice.due_date,
             "status": invoice.status,
             "notes": invoice.notes,
             "logo_url": invoice.logo.url if invoice.logo else None,

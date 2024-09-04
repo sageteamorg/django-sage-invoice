@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
+from import_export.admin import ImportExportModelAdmin
 
 from sage_invoice.admin.actions import export_as_html, show_invoice
 from sage_invoice.models import Invoice, InvoiceColumn, InvoiceItem, InvoiceTotal
+from sage_invoice.resource import InvoiceResource
 
 
 class InvoiceItemInline(admin.TabularInline):
@@ -23,7 +25,8 @@ class InvoiceTotalInline(admin.TabularInline):
 
 
 @admin.register(Invoice)
-class InvoiceAdmin(admin.ModelAdmin):
+class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = InvoiceResource
     admin_priority = 1
     list_display = ("title", "invoice_date", "customer_name", "status")
     search_fields = ("customer_name", "status", "customer_email")
@@ -34,49 +37,58 @@ class InvoiceAdmin(admin.ModelAdmin):
     readonly_fields = ("slug",)
     actions = [export_as_html, show_invoice]
 
-    fieldsets = (
-        (
-            _("Invoice Details"),
-            {
-                "fields": (
-                    "title",
-                    "slug",
-                    "invoice_date",
-                    "tracking_code",
-                    "due_date",
-                    "customer_name",
-                    "customer_email",
-                    "category",
-                ),
-                "description": _(
-                    "Basic details of the invoice including title, date, and customer information."
-                ),
-            },
-        ),
-        (
-            _("Status & Notes"),
-            {
-                "fields": ("status", "notes"),
-                "description": _(
-                    "Current status of the invoice and any additional notes."
-                ),
-            },
-        ),
-        (
-            _("Design Elements"),
-            {
-                "fields": (
-                    "logo",
-                    "signature",
-                    "stamp",
-                    "template_choice",
-                ),
-                "description": _(
-                    "Design-related elements like logo, and template choice."
-                ),
-            },
-        ),
-    )
+    class Media:
+        js = ("assets/js/invoice_admin.js",)
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = (
+            (
+                _("Invoice Details"),
+                {
+                    "fields": (
+                        "title",
+                        "slug",
+                        "invoice_date",
+                        "tracking_code",
+                        "due_date",
+                        "customer_name",
+                        "customer_email",
+                        "category",
+                        "receipt",
+                    ),
+                    "description": _(
+                        "Basic details of the invoice including title, date, and customer information."
+                    ),
+                },
+            ),
+            (
+                _("Status & Notes"),
+                {
+                    "fields": ("status", "notes"),
+                    "description": _(
+                        "Current status of the invoice and any additional notes."
+                    ),
+                },
+            ),
+        )
+        fieldsets += (
+            (
+                _("Design Elements"),
+                {
+                    "fields": (
+                        "logo",
+                        "signature",
+                        "stamp",
+                        "template_choice",
+                    ),
+                    "description": _(
+                        "Design-related elements like logo, and template choice."
+                    ),
+                },
+            ),
+        )
+
+        return fieldsets
 
     inlines = [InvoiceItemInline, InvoiceColumnInline, InvoiceTotalInline]
 

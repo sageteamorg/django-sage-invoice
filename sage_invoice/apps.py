@@ -7,3 +7,4 @@ class InvoiceConfig(AppConfig):
 
     def ready(self) -> None:
         import sage_invoice.check
+        import sage_invoice.signals

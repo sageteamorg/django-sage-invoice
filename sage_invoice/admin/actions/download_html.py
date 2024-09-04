@@ -35,7 +35,7 @@ def export_as_html(modeladmin, request, queryset):
 
         for static_path, archive_path in static_files.items():
             absolute_static_path = os.path.join(
-                settings.BASE_DIR, "media", "static", static_path
+                settings.BASE_DIR, "sage_invoice", "static", static_path
             )
             if os.path.exists(absolute_static_path):
                 with open(absolute_static_path, "rb") as static_file:
