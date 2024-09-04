@@ -4,35 +4,35 @@ from django.conf import settings
 
 
 class JinjaTemplateDiscovery:
-    model_prefix = getattr(settings, "MODEL_PREFIX", "quotation")
+    SAGE_MODEL_PREFIX = getattr(settings, "SAGE_MODEL_PREFIX", "quotation")
     receipt_prefix = "receipt"
 
     def __init__(self, models_dir: str = "templates"):
         self.models_dir = os.path.join(
             settings.BASE_DIR, "sage_invoice", "templates", models_dir
         )
-        self.model_templates = {}
+        self.SAGE_MODEL_TEMPLATEs = {}
         self.receipt_templates = {}
         self.discover()
 
     def discover(self):
         """Discovers model and receipt template files in the specified models
-        directory and categorizes them into model_templates and.
+        directory and categorizes them into SAGE_MODEL_TEMPLATEs and.
 
         receipt_templates dictionaries.
         """
         for filename in os.listdir(self.models_dir):
             if filename.endswith(".jinja2"):
-                if filename.startswith(self.model_prefix):
+                if filename.startswith(self.SAGE_MODEL_PREFIX):
                     name, _ = os.path.splitext(filename)
-                    if len(self.model_prefix) <= len(".jinja2"):
+                    if len(self.SAGE_MODEL_PREFIX) <= len(".jinja2"):
                         template_name = "".join(filter(str.isdigit, name))
                     else:
                         template_name = filename[
-                            len(self.model_prefix) : -len(".jinja2")
+                            len(self.SAGE_MODEL_PREFIX) : -len(".jinja2")
                         ]
 
-                    self.model_templates[template_name] = os.path.join(
+                    self.SAGE_MODEL_TEMPLATEs[template_name] = os.path.join(
                         self.models_dir, filename
                     )
                 elif filename.startswith(self.receipt_prefix):
@@ -54,4 +54,4 @@ class JinjaTemplateDiscovery:
         if is_receipt:
             return self.receipt_templates.get(template_choice)
         else:
-            return self.model_templates.get(template_choice)
+            return self.SAGE_MODEL_TEMPLATEs.get(template_choice)

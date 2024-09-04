@@ -25,7 +25,7 @@ class QuotationService:
         """
         logger.info("Initializing QuotationService")
         self.template_discovery = JinjaTemplateDiscovery(
-            models_dir=getattr(settings, "MODEL_TEMPLATE", "sage_invoice")
+            models_dir=getattr(settings, "SAGE_MODEL_TEMPLATE", "sage_invoice")
         )
         self.env = Environment(
             loader=FileSystemLoader(self.template_discovery.models_dir),

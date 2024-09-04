@@ -3,7 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from sage_tools.mixins.models import TitleSlugMixin
 
-from sage_invoice.helpers.choice import InvoiceStatus, get_template_choices
+from sage_invoice.helpers.choice import InvoiceStatus
+from sage_invoice.helpers.funcs import get_template_choices
 
 
 class Invoice(TitleSlugMixin):

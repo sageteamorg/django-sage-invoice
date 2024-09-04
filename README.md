@@ -68,14 +68,14 @@ Django Sage Invoice is a Django application for managing invoices. It provides a
 
 ### Django Settings
 
-Add `django-sage-invoice` to your `INSTALLED_APPS` in the Django settings and configure the `MODEL_PREFIX` and `MODEL_TEMPLATE`:
+Add `django-sage-invoice` to your `INSTALLED_APPS` in the Django settings and configure the `SAGE_MODEL_PREFIX` and `SAGE_MODEL_TEMPLATE`:
 
 ```python
 INSTALLED_APPS = [
-    ...
+    # other packages
+    "sage_tools",
     "sage_invoice",
-    ...
 ]
-MODEL_PREFIX = "invoice"
-MODEL_TEMPLATE = "sage_invoice"
+SAGE_MODEL_PREFIX = "invoice"
+SAGE_MODEL_TEMPLATE = "sage_invoice"
 ```

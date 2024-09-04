@@ -62,7 +62,7 @@ Django Settings Configuration
 Installed Apps
 ~~~~~~~~~~~~~~
 
-To use `django-sage-invoice`, add it to your `INSTALLED_APPS` in the Django settings and configure the `MODEL_PREFIX` and `MODEL_TEMPLATE`:
+To use `django-sage-invoice`, add it to your `INSTALLED_APPS` in the Django settings and configure the `SAGE_MODEL_PREFIX` and `SAGE_MODEL_TEMPLATE`:
 
 .. code-block:: python
 
@@ -70,19 +70,19 @@ To use `django-sage-invoice`, add it to your `INSTALLED_APPS` in the Django sett
        # other packages
        "sage_invoice",
    ]
-   MODEL_PREFIX = "invoice"
-   MODEL_TEMPLATE = "sage_invoice"
+   SAGE_MODEL_PREFIX = "invoice"
+   SAGE_MODEL_TEMPLATE = "sage_invoice"
 
-Explanation of `MODEL_PREFIX` and `MODEL_TEMPLATE`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Explanation of `SAGE_MODEL_PREFIX` and `SAGE_MODEL_TEMPLATE`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- **MODEL_PREFIX**: This setting defines the prefix used to identify your models when searching for Jinja2 templates. By setting `MODEL_PREFIX = "invoice"`, the application will look for template files that start with "invoice" in the specified directory.
-
-
+- **SAGE_MODEL_PREFIX**: This setting defines the prefix used to identify your models when searching for Jinja2 templates. By setting `SAGE_MODEL_PREFIX = "invoice"`, the application will look for template files that start with "invoice" in the specified directory.
 
 
-- **MODEL_TEMPLATE**: This setting defines the directory where your model templates are stored. By setting `MODEL_TEMPLATE = "sage_invoice"`, the application will search for templates in the `sage_invoice` directory under the specified base directory.
+
+
+- **SAGE_MODEL_TEMPLATE**: This setting defines the directory where your model templates are stored. By setting `SAGE_MODEL_TEMPLATE = "sage_invoice"`, the application will search for templates in the `sage_invoice` directory under the specified base directory.
 
 .. warning::
 
-   The `django-sage-invoice` package will not function correctly without configuring both `MODEL_PREFIX` and `MODEL_TEMPLATE` in your Django settings. Make sure these settings are properly configured to avoid any issues.
+   The `django-sage-invoice` package will not function correctly without configuring both `SAGE_MODEL_PREFIX` and `SAGE_MODEL_TEMPLATE` in your Django settings. Make sure these settings are properly configured to avoid any issues.
