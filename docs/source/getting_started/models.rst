@@ -86,26 +86,37 @@ To integrate these models into the Django admin interface, register them in the 
 .. code-block:: python
 
     from django.contrib import admin
-    from sage_invoice.models import Invoice, InvoiceCategory, InvoiceItem, InvoiceColumn, InvoiceTotal
+    from sage_invoice.models import (
+        Invoice,
+        InvoiceCategory,
+        InvoiceItem,
+        InvoiceColumn,
+        InvoiceTotal,
+    )
+
 
     @admin.register(Invoice)
     class InvoiceAdmin(admin.ModelAdmin):
-        list_display = ['title', 'invoice_date', 'customer_name', 'status']
+        list_display = ["title", "invoice_date", "customer_name", "status"]
+
 
     @admin.register(InvoiceCategory)
     class InvoiceCategoryAdmin(admin.ModelAdmin):
-        list_display = ['title', 'description']
+        list_display = ["title", "description"]
+
 
     @admin.register(InvoiceItem)
     class InvoiceItemAdmin(admin.ModelAdmin):
-        list_display = ['description', 'quantity', 'unit_price', 'total_price']
+        list_display = ["description", "quantity", "unit_price", "total_price"]
+
 
     @admin.register(InvoiceColumn)
     class InvoiceColumnAdmin(admin.ModelAdmin):
-        list_display = ['column_name', 'priority', 'value']
+        list_display = ["column_name", "priority", "value"]
+
 
     @admin.register(InvoiceTotal)
     class InvoiceTotalAdmin(admin.ModelAdmin):
-        list_display = ['subtotal', 'tax_percentage', 'discount_percentage', 'total_amount']
+        list_display = ["subtotal", "tax_percentage", "discount_percentage", "total_amount"]
 
 This will allow you to manage the different invoice models directly from the Django admin interface.

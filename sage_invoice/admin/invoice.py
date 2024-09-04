@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 
-from sage_invoice.admin.actions import export_as_html, show_invoice
+from sage_invoice.admin.actions import show_invoice
 from sage_invoice.models import Invoice, InvoiceColumn, InvoiceItem, InvoiceTotal
 from sage_invoice.resource import InvoiceResource
 
@@ -35,7 +35,7 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_filter = ("status", "invoice_date", "category")
     ordering = ("-invoice_date",)
     readonly_fields = ("slug",)
-    actions = [export_as_html, show_invoice]
+    actions = [show_invoice]
 
     class Media:
         js = ("assets/js/invoice_admin.js",)

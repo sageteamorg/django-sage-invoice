@@ -66,13 +66,12 @@ To use `django-sage-invoice`, add it to your `INSTALLED_APPS` in the Django sett
 
 .. code-block:: python
 
-    INSTALLED_APPS = [
-        ...
-        "sage_invoice",
-        ...
-    ]
-    MODEL_PREFIX = "invoice"
-    MODEL_TEMPLATE = "sage_invoice"
+   INSTALLED_APPS = [
+       # other packages
+       "sage_invoice",
+   ]
+   MODEL_PREFIX = "invoice"
+   MODEL_TEMPLATE = "sage_invoice"
 
 Explanation of `MODEL_PREFIX` and `MODEL_TEMPLATE`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

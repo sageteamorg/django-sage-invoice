@@ -3,7 +3,8 @@ class InvoiceTotalService:
 
     def calculate_and_save(self, invoice_total: dict, *args, **kwargs):
         """Calculate the subtotal, tax amount, discount amount, and total
-        amount and then save the instance."""
+        amount and then save the instance.
+        """
         invoice_total.subtotal = sum(
             item.total_price for item in invoice_total.invoice.items.all()
         )

@@ -17,8 +17,10 @@ class JinjaTemplateDiscovery:
 
     def discover(self):
         """Discovers model and receipt template files in the specified models
-        directory and categorizes them into model_templates and
-        receipt_templates dictionaries."""
+        directory and categorizes them into model_templates and.
+
+        receipt_templates dictionaries.
+        """
         for filename in os.listdir(self.models_dir):
             if filename.endswith(".jinja2"):
                 if filename.startswith(self.model_prefix):
@@ -47,7 +49,8 @@ class JinjaTemplateDiscovery:
 
     def get_template_path(self, template_choice, is_receipt=False):
         """Returns the template path based on the template choice and whether
-        it is a receipt."""
+        it is a receipt.
+        """
         if is_receipt:
             return self.receipt_templates.get(template_choice)
         else:

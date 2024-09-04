@@ -13,7 +13,8 @@ class InvoiceStatus(models.TextChoices):
 
 def get_template_choices(is_receipt=False):
     """Dynamically generates the template choices based on the templates Only
-    the base name of the template is shown in the choices."""
+    the base name of the template is shown in the choices.
+    """
     template_discovery = JinjaTemplateDiscovery(
         models_dir=getattr(settings, "MODEL_TEMPLATE", "sage_invoice")
     )

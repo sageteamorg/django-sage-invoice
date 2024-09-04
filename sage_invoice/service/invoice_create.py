@@ -1,12 +1,12 @@
 import logging
 import os
-import random
+import secrets
 from datetime import datetime
 from typing import Any, Dict
 
 from django.conf import settings
 from django.db.models import QuerySet
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.exceptions import TemplateNotFound
 
 from sage_invoice.models import InvoiceColumn
@@ -21,13 +21,17 @@ class QuotationService:
 
     def __init__(self) -> None:
         """Initialize the QuotationService with the template discovery and
-        Jinja2."""
+        Jinja2.
+        """
         logger.info("Initializing QuotationService")
         self.template_discovery = JinjaTemplateDiscovery(
             models_dir=getattr(settings, "MODEL_TEMPLATE", "sage_invoice")
         )
         self.env = Environment(
-            loader=FileSystemLoader(self.template_discovery.models_dir)
+            loader=FileSystemLoader(self.template_discovery.models_dir),
+            autoescape=select_autoescape(
+                ["html", "xml"]
+            ),  # Enable autoescape for HTML and XML templates
         )
         logger.info(
             "Template discovery set to directory: %s",
@@ -40,10 +44,9 @@ class QuotationService:
 
         Returns:
             str: A unique tracking code.
-
         """
         date_str = creation_date.strftime("%Y%m%d")
-        random_number = random.randint(1000, 9999)
+        random_number = secrets.randbelow(8000) + 1000
         tracking_code = f"{user_input}-{date_str}-{random_number}"
         logger.info("Generated tracking code: %s", tracking_code)
         return tracking_code
@@ -59,7 +62,6 @@ class QuotationService:
 
         Raises:
             TemplateNotFound: If the selected template is not found.
-
         """
         logger.info("Rendering quotation")
         invoice = queryset.first()
@@ -86,7 +88,6 @@ class QuotationService:
 
         Returns:
             Dict[str, Any]: The context data for rendering the quotation.
-
         """
         logger.info("Preparing context data for quotation")
         invoice = queryset.first()
