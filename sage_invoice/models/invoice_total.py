@@ -1,10 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from sage_invoice.service.total import InvoiceTotalService
 
-
-class InvoiceTotal(models.Model):
+class Expense(models.Model):
     subtotal = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -15,6 +13,7 @@ class InvoiceTotal(models.Model):
     tax_percentage = models.DecimalField(
         max_digits=5,
         decimal_places=2,
+        default=0,
         verbose_name=_("Tax Percentage"),
         help_text=_("The tax percentage applied to the invoice."),
         db_comment="The percentage of tax applied to the invoice",
@@ -22,6 +21,7 @@ class InvoiceTotal(models.Model):
     discount_percentage = models.DecimalField(
         max_digits=5,
         decimal_places=2,
+        default=0,
         verbose_name=_("Discount Percentage"),
         help_text=_("The discount percentage applied to the invoice."),
         db_comment="The percentage of discount applied to the invoice",
@@ -56,16 +56,13 @@ class InvoiceTotal(models.Model):
         db_comment="Reference to the associated invoice",
     )
 
-    def save(self, *args, **kwargs):
-        InvoiceTotalService().calculate_and_save(self, *args, **kwargs)
-
     def __str__(self):
-        return f"Total for Invoice {self.invoice.pk}"
+        return f"Expense {self.invoice.pk}"
 
     def __repr__(self):
-        return f"<InvoiceTotal(subtotal={self.subtotal}, total_amount={self.total_amount})>"
+        return f"<Expense(subtotal={self.subtotal}, total_amount={self.total_amount})>"
 
     class Meta:
-        verbose_name = _("Invoice Total")
-        verbose_name_plural = _("Invoice Totals")
-        db_table = "sage_invoice_totals"
+        verbose_name = _("Expense")
+        verbose_name_plural = _("Expenses")
+        db_table = "sage_expense"

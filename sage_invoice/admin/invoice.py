@@ -3,13 +3,14 @@ from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 
 from sage_invoice.admin.actions import show_invoice
-from sage_invoice.models import Invoice, InvoiceColumn, InvoiceItem, InvoiceTotal
+from sage_invoice.models import Expense, Invoice, InvoiceColumn, InvoiceItem
 from sage_invoice.resource import InvoiceResource
 
 
 class InvoiceItemInline(admin.TabularInline):
     model = InvoiceItem
-    extra = 1
+    extra = 0
+    min_num = 1
     readonly_fields = ("total_price",)
 
 
@@ -18,8 +19,8 @@ class InvoiceColumnInline(admin.TabularInline):
     extra = 1
 
 
-class InvoiceTotalInline(admin.TabularInline):
-    model = InvoiceTotal
+class ExpenseInline(admin.TabularInline):
+    model = Expense
     extra = 1
     readonly_fields = ("subtotal", "tax_amount", "discount_amount", "total_amount")
 
@@ -90,7 +91,7 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return fieldsets
 
-    inlines = [InvoiceItemInline, InvoiceColumnInline, InvoiceTotalInline]
+    inlines = [InvoiceItemInline, InvoiceColumnInline, ExpenseInline]
 
     def get_inline_instances(self, request, obj=None):
         inlines = []
@@ -98,11 +99,11 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             inlines = [
                 InvoiceItemInline(self.model, self.admin_site),
                 InvoiceColumnInline(self.model, self.admin_site),
-                InvoiceTotalInline(self.model, self.admin_site),
+                ExpenseInline(self.model, self.admin_site),
             ]
         else:
             inlines = [
                 InvoiceItemInline(self.model, self.admin_site),
-                InvoiceTotalInline(self.model, self.admin_site),
+                ExpenseInline(self.model, self.admin_site),
             ]
         return inlines

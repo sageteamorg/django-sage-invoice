@@ -149,6 +149,7 @@ disable = [
 max-line-length = 88
 ignore = [
   "migrations",
+  "*/apps.py",
   ".venv/*",
   "build/*",
   "dist/*",
