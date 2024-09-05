@@ -29,7 +29,7 @@ classifiers = [
 "Issues" = "https://github.com/sageteamorg/django-sage-invoice/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.8,<4.0"
 django = [
   { version = ">=4.2,<5.0", python = ">=3.8,<3.10" },
   { version = ">=4.2,<5.3", python = ">=3.10" },      # Django 4.2 and 5.x for Python 3.10+
@@ -38,12 +38,12 @@ jinja2 = "^3.1.4"
 pillow = "^10.4.0"
 django-sage-tools = "^0.2.2"
 django-import-export = "^4.1.1"
-bandit = { extras = [ "toml" ], version = "^1.7.9" }
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.1"
-pre-commit = "^3.8.0"
+pre-commit = "^3.5.0"
 mypy = "^1.11.1"
+sphinx = "^6.2.1"
 sphinx-rtd-theme = "^2.0.0"
 tox = "^4.16.0"
 pylint = "^3.2.6"
@@ -63,7 +63,9 @@ factory-boy = "^3.3.0"
 pytest-benchmark = "^4.0.0"
 pygal = "^3.0.5"
 pylint-django = "^2.5.5"
+poetry-plugin-export = "^1.8.0"
 django-debug-toolbar = "^4.4.6"
+django-migration-linter = "^5.1.0"
 pip-tools = "^7.4.1"
 
 [tool.black]
