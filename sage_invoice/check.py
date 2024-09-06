@@ -51,8 +51,8 @@ def check_required_settings(app_configs, **kwargs):
     errors = []
 
     required_settings = [
-        "MODEL_PREFIX",
-        "MODEL_TEMPLATE",
+        "SAGE_MODEL_PREFIX",
+        "SAGE_MODEL_TEMPLATE",
     ]
 
     for setting in required_settings:

@@ -55,20 +55,25 @@ class TestSystemChecks:
         assert len(errors) == 0
 
     def test_check_required_settings_success(self):
-        settings.MODEL_PREFIX = "invoice"
-        settings.MODEL_TEMPLATE = "sage_invoice"
+        settings.SAGE_MODEL_PREFIX = "invoice"
+        settings.SAGE_MODEL_TEMPLATE = "sage_invoice"
         errors = check_required_settings(None)
         assert errors == []
 
     def test_check_required_settings_failure(self):
-        if hasattr(settings, "MODEL_PREFIX"):
-            del settings.MODEL_PREFIX
-        if hasattr(settings, "MODEL_TEMPLATE"):
-            del settings.MODEL_TEMPLATE
+        if hasattr(settings, "SAGE_MODEL_PREFIX"):
+            del settings.SAGE_MODEL_PREFIX
+        if hasattr(settings, "SAGE_MODEL_TEMPLATE"):
+            del settings.SAGE_MODEL_TEMPLATE
 
         errors = check_required_settings(None)
         assert len(errors) == 2
         assert errors[0].id == "sage_invoice.E003"
-        assert errors[0].msg == "The required setting 'MODEL_PREFIX' is not defined."
+        assert (
+            errors[0].msg == "The required setting 'SAGE_MODEL_PREFIX' is not defined."
+        )
         assert errors[1].id == "sage_invoice.E004"
-        assert errors[1].msg == "The required setting 'MODEL_TEMPLATE' is not defined."
+        assert (
+            errors[1].msg
+            == "The required setting 'SAGE_MODEL_TEMPLATE' is not defined."
+        )

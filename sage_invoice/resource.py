@@ -2,11 +2,11 @@ from import_export import fields, resources
 from import_export.widgets import BooleanWidget, DateWidget, ForeignKeyWidget
 
 from sage_invoice.models import (
+    Expense,
     Invoice,
     InvoiceCategory,
     InvoiceColumn,
     InvoiceItem,
-    InvoiceTotal,
 )
 
 
@@ -47,7 +47,7 @@ class InvoiceColumnResource(resources.ModelResource):
         report_skipped = True
 
 
-class InvoiceTotalResource(resources.ModelResource):
+class ExpenseResource(resources.ModelResource):
     invoice = fields.Field(
         column_name="invoice",
         attribute="invoice",
@@ -55,7 +55,7 @@ class InvoiceTotalResource(resources.ModelResource):
     )
 
     class Meta:
-        model = InvoiceTotal
+        model = Expense
         fields = (
             "id",
             "invoice",
@@ -167,7 +167,7 @@ class InvoiceResource(resources.ModelResource):
         )
 
     def dehydrate_totals(self, invoice):
-        totals = InvoiceTotal.objects.filter(invoice=invoice)
+        totals = Expense.objects.filter(invoice=invoice)
         return "; ".join(
             [
                 f"Subtotal: {total.subtotal}, Tax: {total.tax_amount} ({total.tax_percentage}%), Discount: {total.discount_amount} ({total.discount_percentage}%), Total: {total.total_amount}"

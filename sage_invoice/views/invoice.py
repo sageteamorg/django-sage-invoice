@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
 
-from sage_invoice.helpers.choice import get_template_choices
+from sage_invoice.helpers.funcs import get_template_choices
 from sage_invoice.models import Invoice
 from sage_invoice.service.invoice_create import QuotationService
 

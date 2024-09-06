@@ -5,8 +5,10 @@ from sage_tools.mixins.models import TitleSlugMixin
 
 class InvoiceCategory(TitleSlugMixin):
     description = models.CharField(
-        max_length=255,
         verbose_name=_("Description"),
+        max_length=255,
+        null=True,
+        blank=True,
         help_text=_("Description of the Category."),
         db_comment="The description of the category",
     )

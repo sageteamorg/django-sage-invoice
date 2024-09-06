@@ -3,7 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from sage_tools.mixins.models import TitleSlugMixin
 
-from sage_invoice.helpers.choice import InvoiceStatus, get_template_choices
+from sage_invoice.helpers.choice import InvoiceStatus
+from sage_invoice.helpers.funcs import get_template_choices
 
 
 class Invoice(TitleSlugMixin):
@@ -97,7 +98,7 @@ class Invoice(TitleSlugMixin):
     )
 
     def clean(self):
-        if self.due_date <= self.invoice_date:
+        if self.due_date < self.invoice_date:
             raise ValidationError(_("Due Date must be later than Invoice Date."))
 
     class Meta:
@@ -106,7 +107,7 @@ class Invoice(TitleSlugMixin):
         db_table = "sage_invoice"
 
     def __str__(self):
-        return f"Invoice {self.pk} - {self.customer_name}"
+        return f"{self.title}"
 
     def __repr__(self):
-        return f"<Invoice {self.pk}>"
+        return f"Invoice> {self.title}>"

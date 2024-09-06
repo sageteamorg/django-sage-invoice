@@ -5,10 +5,10 @@ from unittest import mock
 import pytest
 from jinja2.exceptions import TemplateNotFound
 
-from sage_invoice.models import Invoice, InvoiceCategory, InvoiceColumn, InvoiceTotal
+from sage_invoice.models import Invoice, InvoiceCategory, InvoiceColumn, Expense
 from sage_invoice.service.discovery import JinjaTemplateDiscovery
 from sage_invoice.service.invoice_create import QuotationService
-from sage_invoice.service.total import InvoiceTotalService
+from sage_invoice.service.total import ExpenseService
 
 
 class TestQuotationService:
@@ -147,7 +147,7 @@ class TestQuotationService:
             assert rendered_content == "Rendered content"
 
 
-class TestInvoiceTotalService:
+class TestExpenseService:
 
     @pytest.fixture
     def invoice_category(self, db):
@@ -178,25 +178,25 @@ class TestInvoiceTotalService:
 
     @pytest.fixture
     def invoice_total(self, invoice):
-        """Fixture to create an InvoiceTotal instance."""
-        return InvoiceTotal.objects.create(
+        """Fixture to create an Expense instance."""
+        return Expense.objects.create(
             tax_percentage=Decimal("10.00"),
             discount_percentage=Decimal("5.00"),
             invoice=invoice,
         )
 
     def test_calculate_and_save(self, invoice_total):
-        """Test the calculate_and_save method of InvoiceTotalService."""
-        service = InvoiceTotalService()
+        """Test the calculate_and_save method of ExpenseService."""
+        service = ExpenseService()
 
-        with mock.patch.object(InvoiceTotal, "save_base") as mock_save_base:
+        with mock.patch.object(Expense, "save") as mock_save:
             service.calculate_and_save(invoice_total)
 
             assert invoice_total.subtotal == Decimal("200.00")
             assert invoice_total.tax_amount == Decimal("20.00")
             assert invoice_total.discount_amount == Decimal("10.00")
             assert invoice_total.total_amount == Decimal("210.00")
-            mock_save_base.assert_called_once()
+            mock_save.assert_called_once()
 
     def test_calculate_and_save_with_no_items(self, db, invoice_category):
         """Test calculate_and_save when the invoice has no items."""
@@ -210,19 +210,19 @@ class TestInvoiceTotalService:
             due_date="2024-09-01",
         )
 
-        invoice_total = InvoiceTotal.objects.create(
+        invoice_total = Expense.objects.create(
             tax_percentage=Decimal("10.00"),
             discount_percentage=Decimal("5.00"),
             invoice=invoice,
         )
 
-        service = InvoiceTotalService()
+        service = ExpenseService()
 
-        with mock.patch.object(InvoiceTotal, "save_base") as mock_save_base:
+        with mock.patch.object(Expense, "save") as mock_save:
             service.calculate_and_save(invoice_total)
 
             assert invoice_total.subtotal == Decimal("0.00")
             assert invoice_total.tax_amount == Decimal("0.00")
             assert invoice_total.discount_amount == Decimal("0.00")
             assert invoice_total.total_amount == Decimal("0.00")
-            mock_save_base.assert_called_once()
+            mock_save.assert_called_once()

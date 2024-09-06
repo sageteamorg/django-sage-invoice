@@ -26,7 +26,9 @@ class InvoiceItem(models.Model):
         max_digits=10,
         decimal_places=2,
         verbose_name=_("Total Price"),
-        help_text=_("Auto Genrated total price for this item (quantity * unit price)."),
+        help_text=_(
+            "Auto Generated total price for this item (quantity * unit price)."
+        ),
         db_comment="The total price calculated as quantity * unit price",
     )
     invoice = models.ForeignKey(

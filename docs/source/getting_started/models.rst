@@ -62,10 +62,10 @@ Fields
 - `invoice`: The invoice associated with this custom column.
 - `item`: The item associated with this custom column.
 
-InvoiceTotal
+Expense
 ------------
 
-The `InvoiceTotal` model represents the total amount for an invoice, including calculations for tax, discounts, and the final total.
+The `Expense` model represents the total amount for an invoice, including calculations for tax, discounts, and the final total.
 
 Fields
 ^^^^^^
@@ -91,7 +91,7 @@ To integrate these models into the Django admin interface, register them in the 
         InvoiceCategory,
         InvoiceItem,
         InvoiceColumn,
-        InvoiceTotal,
+        Expense,
     )
 
 
@@ -115,8 +115,8 @@ To integrate these models into the Django admin interface, register them in the 
         list_display = ["column_name", "priority", "value"]
 
 
-    @admin.register(InvoiceTotal)
-    class InvoiceTotalAdmin(admin.ModelAdmin):
+    @admin.register(Expense)
+    class ExpenseAdmin(admin.ModelAdmin):
         list_display = ["subtotal", "tax_percentage", "discount_percentage", "total_amount"]
 
 This will allow you to manage the different invoice models directly from the Django admin interface.
