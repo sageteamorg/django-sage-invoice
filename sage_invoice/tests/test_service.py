@@ -147,82 +147,82 @@ class TestQuotationService:
             assert rendered_content == "Rendered content"
 
 
-# class TestExpenseService:
+class TestExpenseService:
 
-#     @pytest.fixture
-#     def invoice_category(self, db):
-#         """Fixture to create a real InvoiceCategory instance."""
-#         return InvoiceCategory.objects.create(
-#             title="Default Category", description="A default category for testing."
-#         )
+    @pytest.fixture
+    def invoice_category(self, db):
+        """Fixture to create a real InvoiceCategory instance."""
+        return InvoiceCategory.objects.create(
+            title="Default Category", description="A default category for testing."
+        )
 
-#     @pytest.fixture
-#     def invoice(self, db, invoice_category):
-#         """Fixture to create a real Invoice instance with items."""
-#         invoice = Invoice.objects.create(
-#             title="Test Invoice",
-#             invoice_date="2024-08-25",
-#             customer_name="John Doe",
-#             customer_email="john.doe@example.com",
-#             status="unpaid",
-#             category=invoice_category,
-#             due_date="2024-09-01",
-#         )
-#         invoice.items.create(
-#             description="Item 1", quantity=1, unit_price=Decimal("100.00")
-#         )
-#         invoice.items.create(
-#             description="Item 2", quantity=2, unit_price=Decimal("50.00")
-#         )
-#         return invoice
+    @pytest.fixture
+    def invoice(self, db, invoice_category):
+        """Fixture to create a real Invoice instance with items."""
+        invoice = Invoice.objects.create(
+            title="Test Invoice",
+            invoice_date="2024-08-25",
+            customer_name="John Doe",
+            customer_email="john.doe@example.com",
+            status="unpaid",
+            category=invoice_category,
+            due_date="2024-09-01",
+        )
+        invoice.items.create(
+            description="Item 1", quantity=1, unit_price=Decimal("100.00")
+        )
+        invoice.items.create(
+            description="Item 2", quantity=2, unit_price=Decimal("50.00")
+        )
+        return invoice
 
-#     @pytest.fixture
-#     def invoice_total(self, invoice):
-#         """Fixture to create an Expense instance."""
-#         return Expense.objects.create(
-#             tax_percentage=Decimal("10.00"),
-#             discount_percentage=Decimal("5.00"),
-#             invoice=invoice,
-#         )
+    @pytest.fixture
+    def invoice_total(self, invoice):
+        """Fixture to create an Expense instance."""
+        return Expense.objects.create(
+            tax_percentage=Decimal("10.00"),
+            discount_percentage=Decimal("5.00"),
+            invoice=invoice,
+        )
 
-#     def test_calculate_and_save(self, invoice_total):
-#         """Test the calculate_and_save method of ExpenseService."""
-#         service = ExpenseService()
+    def test_calculate_and_save(self, invoice_total):
+        """Test the calculate_and_save method of ExpenseService."""
+        service = ExpenseService()
 
-#         with mock.patch.object(Expense, "save_base") as mock_save_base:
-#             service.calculate_and_save(invoice_total)
+        with mock.patch.object(Expense, "save") as mock_save:
+            service.calculate_and_save(invoice_total)
 
-#             assert invoice_total.subtotal == Decimal("200.00")
-#             assert invoice_total.tax_amount == Decimal("20.00")
-#             assert invoice_total.discount_amount == Decimal("10.00")
-#             assert invoice_total.total_amount == Decimal("210.00")
-#             mock_save_base.assert_called_once()
+            assert invoice_total.subtotal == Decimal("200.00")
+            assert invoice_total.tax_amount == Decimal("20.00")
+            assert invoice_total.discount_amount == Decimal("10.00")
+            assert invoice_total.total_amount == Decimal("210.00")
+            mock_save.assert_called_once()
 
-#     def test_calculate_and_save_with_no_items(self, db, invoice_category):
-#         """Test calculate_and_save when the invoice has no items."""
-#         invoice = Invoice.objects.create(
-#             title="Empty Invoice",
-#             invoice_date="2024-08-25",
-#             customer_name="John Doe",
-#             customer_email="john.doe@example.com",
-#             status="unpaid",
-#             category=invoice_category,
-#             due_date="2024-09-01",
-#         )
+    def test_calculate_and_save_with_no_items(self, db, invoice_category):
+        """Test calculate_and_save when the invoice has no items."""
+        invoice = Invoice.objects.create(
+            title="Empty Invoice",
+            invoice_date="2024-08-25",
+            customer_name="John Doe",
+            customer_email="john.doe@example.com",
+            status="unpaid",
+            category=invoice_category,
+            due_date="2024-09-01",
+        )
 
-#         invoice_total = Expense.objects.create(
-#             tax_percentage=Decimal("10.00"),
-#             discount_percentage=Decimal("5.00"),
-#             invoice=invoice,
-#         )
+        invoice_total = Expense.objects.create(
+            tax_percentage=Decimal("10.00"),
+            discount_percentage=Decimal("5.00"),
+            invoice=invoice,
+        )
 
-#         service = ExpenseService()
+        service = ExpenseService()
 
-#         with mock.patch.object(Expense, "save_base") as mock_save_base:
-#             service.calculate_and_save(invoice_total)
+        with mock.patch.object(Expense, "save") as mock_save:
+            service.calculate_and_save(invoice_total)
 
-#             assert invoice_total.subtotal == Decimal("0.00")
-#             assert invoice_total.tax_amount == Decimal("0.00")
-#             assert invoice_total.discount_amount == Decimal("0.00")
-#             assert invoice_total.total_amount == Decimal("0.00")
-#             mock_save_base.assert_called_once()
+            assert invoice_total.subtotal == Decimal("0.00")
+            assert invoice_total.tax_amount == Decimal("0.00")
+            assert invoice_total.discount_amount == Decimal("0.00")
+            assert invoice_total.total_amount == Decimal("0.00")
+            mock_save.assert_called_once()

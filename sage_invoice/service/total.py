@@ -4,11 +4,11 @@ from decimal import Decimal
 class ExpenseService:
     """Service class to handle calculations and saving for Expense."""
 
-    def calculate_and_save(self, invoice_total: dict, *args, **kwargs):
+    def calculate_and_save(self, invoice_total, *args, **kwargs):
         """Calculate the subtotal, tax amount, discount amount, and total
-        amount and then save the instance.
+        amount, and then save the instance.
         """
-        # Calculate subtotal from related items
+        # Calculate subtotal from related items, ensure it's not None
         invoice_total.subtotal = sum(
             item.total_price for item in invoice_total.invoice.items.all()
         )
@@ -34,5 +34,5 @@ class ExpenseService:
             - invoice_total.discount_amount
         )
 
-        # Save the Expense instance
-        invoice_total.save_base(*args, **kwargs)
+        # Save the Expense instance using the standard save method
+        invoice_total.save(*args, **kwargs)
