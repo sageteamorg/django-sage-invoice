@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 from sage_tools.mixins.models import TitleSlugMixin
 
 from sage_invoice.helpers.choice import InvoiceStatus
@@ -100,6 +101,9 @@ class Invoice(TitleSlugMixin):
     def clean(self):
         if self.due_date < self.invoice_date:
             raise ValidationError(_("Due Date must be later than Invoice Date."))
+
+    def get_absolute_url(self):
+        return reverse('invoice_detail', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = _("Invoice")
