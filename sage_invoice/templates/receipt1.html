@@ -421,6 +421,7 @@
                             {% for column in custom_columns %}
                                 <th>{{ column }}</th>
                             {% endfor %}
+                            <th>Currency</th>
                             <th>Price</th>
                             <th>Qty</th>
                             <th>Total</th>
@@ -434,6 +435,7 @@
                                 {% for column in custom_columns %}
                                     <td>{{ item.custom_data|get_item:column }}</td>
                                 {% endfor %}
+                                <td>{{ currency }}</td>
                                 <td>{{ item.unit_price }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.total_price }}</td>

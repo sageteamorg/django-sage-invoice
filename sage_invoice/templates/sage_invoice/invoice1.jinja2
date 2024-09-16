@@ -102,7 +102,7 @@
                   <tbody>
                     <tr>
                       <td class="tm_width_3 tm_primary_color tm_border_none tm_medium">Subtotal</td>
-                      <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_medium">{{ subtotal }}</td>
+                      <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_medium">{{ subtotal }} {{ currency }}</td>
                     </tr>
                     <tr>
                       <td class="tm_width_3 tm_danger_color tm_border_none tm_pt0">Discount {{ discount_percentage }}%</td>
@@ -114,7 +114,7 @@
                     </tr>
                     <tr class="tm_accent_border_20 tm_border">
                       <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_accent_bg_10">Grand Total</td>
-                      <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_text_right tm_accent_bg_10">{{ grand_total }}</td>
+                      <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_text_right tm_accent_bg_10">{{ grand_total }} {{ currency }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -132,9 +132,10 @@
           <div class="tm_bottom_invoice tm_accent_border_20">
             <div class="tm_bottom_invoice_left">
               <p class="tm_m0 tm_f18 tm_accent_color tm_mb5">Thank you for your business.</p>
-              <p class="tm_primary_color tm_f12 tm_m0 tm_bold">Terms & Condition</p>
+              <p class="tm_primary_color tm_f12 tm_m0 tm_bold">Notes</p>
               <p class="tm_m0 tm_f12">{{notes}}</p>
             </div>
+
             <div class="tm_bottom_invoice_right tm_mobile_hide">
               <div class="tm_logo"><img src="logo.png" alt="Logo"></div>
             </div>

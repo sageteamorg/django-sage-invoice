@@ -2,27 +2,33 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 
-from sage_invoice.admin.actions import show_invoice
-from sage_invoice.models import Expense, Invoice, InvoiceColumn, InvoiceItem
+from sage_invoice.admin.actions import export_pdf
+from sage_invoice.models import Column, Expense, Invoice, Item
 from sage_invoice.resource import InvoiceResource
 
 
-class InvoiceItemInline(admin.TabularInline):
-    model = InvoiceItem
+class ItemInline(admin.TabularInline):
+    model = Item
     extra = 0
     min_num = 1
     readonly_fields = ("total_price",)
 
 
-class InvoiceColumnInline(admin.TabularInline):
-    model = InvoiceColumn
+class ColumnInline(admin.TabularInline):
+    model = Column
     extra = 1
 
 
 class ExpenseInline(admin.TabularInline):
     model = Expense
     extra = 1
-    readonly_fields = ("subtotal", "tax_amount", "discount_amount", "total_amount")
+    readonly_fields = (
+        "subtotal",
+        "tax_amount",
+        "discount_amount",
+        "total_amount",
+        "concession_amount",
+    )
 
 
 @admin.register(Invoice)
@@ -31,12 +37,12 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     admin_priority = 1
     list_display = ("title", "invoice_date", "customer_name", "status")
     search_fields = ("customer_name", "status", "customer_email")
-    autocomplete_fields = ("category",)
     save_on_top = True
     list_filter = ("status", "invoice_date", "category")
     ordering = ("-invoice_date",)
+    autocomplete_fields = ("category",)
     readonly_fields = ("slug",)
-    actions = [show_invoice]
+    actions = [export_pdf]
 
     class Media:
         js = ("assets/js/invoice_admin.js",)
@@ -53,19 +59,21 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                         "tracking_code",
                         "due_date",
                         "customer_name",
-                        "customer_email",
+                        "contacts",
                         "category",
                         "receipt",
                     ),
                     "description": _(
-                        "Basic details of the invoice including title, date, and customer information."
+                        """
+                        Basic details of the invoice including title, date,
+                        and customer information."""
                     ),
                 },
             ),
             (
-                _("Status & Notes"),
+                _("Status & Currency"),
                 {
-                    "fields": ("status", "notes"),
+                    "fields": ("status", "notes", "currency"),
                     "description": _(
                         "Current status of the invoice and any additional notes."
                     ),
@@ -91,19 +99,19 @@ class InvoiceAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         return fieldsets
 
-    inlines = [InvoiceItemInline, InvoiceColumnInline, ExpenseInline]
+    inlines = [ItemInline, ColumnInline, ExpenseInline]
 
     def get_inline_instances(self, request, obj=None):
         inlines = []
         if obj and obj.pk:
             inlines = [
-                InvoiceItemInline(self.model, self.admin_site),
-                InvoiceColumnInline(self.model, self.admin_site),
+                ItemInline(self.model, self.admin_site),
+                ColumnInline(self.model, self.admin_site),
                 ExpenseInline(self.model, self.admin_site),
             ]
         else:
             inlines = [
-                InvoiceItemInline(self.model, self.admin_site),
+                ItemInline(self.model, self.admin_site),
                 ExpenseInline(self.model, self.admin_site),
             ]
         return inlines

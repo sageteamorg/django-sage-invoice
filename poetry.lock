@@ -680,6 +680,20 @@ xlsx = ["tablib[xlsx] (==3.5.0)"]
 yaml = ["tablib[yaml] (==3.5.0)"]
 
 [[package]]
+name = "django-jsonform"
+version = "2.22.0"
+description = "A user-friendly JSON editing form for Django admin."
+optional = false
+python-versions = ">=3.4"
+files = [
+    {file = "django-jsonform-2.22.0.tar.gz", hash = "sha256:0c9d50fb371938e7262a7fef7c5a60835dd288f872f87b952d5e2ea84c825221"},
+    {file = "django_jsonform-2.22.0-py3-none-any.whl", hash = "sha256:c4dd1ba2b0152bd3164aacf326a83c35355c70d12de81908b5ced5f94c8263d6"},
+]
+
+[package.dependencies]
+django = ">=2.0"
+
+[[package]]
 name = "django-sage-tools"
 version = "0.2.2"
 description = "Reusable, generic mixins for Django"
@@ -2108,4 +2122,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "3e5bf366ab301207d2b2cbaf85ad5549248d9f8be07eb25b695c8505a0ee13be"
+content-hash = "0aab8579cac4bd5661ca0b8e83c03b15e686f5414ffa39dd3c533b6621c7a870"

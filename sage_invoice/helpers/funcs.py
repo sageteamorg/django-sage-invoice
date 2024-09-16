@@ -1,4 +1,6 @@
 import os
+import secrets
+from datetime import datetime
 
 from django.conf import settings
 
@@ -28,3 +30,16 @@ def get_template_choices(is_receipt=False):
     ]
 
     return choices or [("", "No Templates Available")]
+
+
+def generate_tracking_code(user_input: str, creation_date: datetime) -> str:
+    """Generate a unique tracking code based on user input and the creation
+    date.
+
+    Returns:
+        str: A unique tracking code.
+    """
+    date_str = creation_date.strftime("%Y%m%d")
+    random_number = secrets.randbelow(8000) + 1000
+    tracking_code = f"{user_input}-{date_str}-{random_number}"
+    return tracking_code

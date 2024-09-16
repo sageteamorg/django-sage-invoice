@@ -6,7 +6,7 @@ The admin layer customizes the Django admin interface to manage invoices efficie
 Managing Invoices
 -----------------
 
-In the Django admin interface, you can manage various aspects of invoices, including creating, editing, and deleting them.
+In the Django admin interface, you can manage various aspects of invoices, including creating, editing, deleting, and downloading them as PDFs.
 
 Viewing Invoices
 ----------------
@@ -38,7 +38,6 @@ To create a new invoice:
 
 4. Select design elements like logo, background, signature, and stamp.
 
-
 5. Choose a template for the invoice. The system comes with three pre-defined templates, but you can create your own custom templates as well.
 
 .. image:: ../../_static/4.png
@@ -47,7 +46,7 @@ To create a new invoice:
 6. After saving the invoice, you can add custom columns to include additional details like delivery date or warranty period.
 
 .. image:: ../../_static/5.png
-   :alt: Adding a custom columns
+   :alt: Adding a Custom Column
 
 .. note::
    Custom columns can only be added after the invoice has been created.
@@ -68,22 +67,28 @@ To show the details of an existing invoice:
 
 .. image:: ../../_static/7.png
    :alt: Showing the Selected Invoice
-   
+
 .. image:: ../../_static/8.png
    :alt: Print the Selected Invoice
 
 Exporting Invoices
 ------------------
 
-The Django admin interface also allows you to export invoices as HTML files bundled in a ZIP archive.
+The Django admin interface allows you to export invoices as HTML files bundled in a ZIP archive, or as PDFs.
+
+Downloading Selected Invoices as PDF
+------------------------------------
 
 1. Select one or more invoices from the list.
-2. Choose the `Download selected report as ZIP file` action from the dropdown menu.
+2. Choose the `Download selected invoices as PDF` action from the dropdown menu.
 
 .. image:: ../../_static/9.png
-   :alt: Exporting Invoices
+   :alt: Exporting Invoices as PDF
 
-3. The ZIP file will include the invoice(s) and any associated static files like logos or signatures.
+3. The system will generate the selected invoices in PDF format and download them to your local machine.
 
 .. image:: ../../_static/10.png
-   :alt: Downloaded ZIP File
+   :alt: Exporting Invoices as ZIP
+
+.. note::
+   If you select more than file it will convert the pdf to zip

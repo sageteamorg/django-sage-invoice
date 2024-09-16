@@ -29,6 +29,14 @@ class Expense(models.Model):
         help_text=_("The discount percentage applied to the invoice."),
         db_comment="The percentage of discount applied to the invoice",
     )
+    concession_percentage = models.DecimalField(
+        verbose_name=_("Concession Percentage"),
+        max_digits=5,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        help_text=_("The concession percentage applied to the invoice."),
+        db_comment="The percentage of concession applied to the invoice",
+    )
     tax_amount = models.DecimalField(
         verbose_name=_("Tax Amount"),
         max_digits=10,
@@ -44,6 +52,14 @@ class Expense(models.Model):
         default=Decimal("0.00"),
         help_text=_("The calculated discount amount."),
         db_comment="The total discount amount calculated based on the subtotal and discount percentage",
+    )
+    concession_amount = models.DecimalField(
+        verbose_name=_("Concession Amount"),
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        help_text=_("The calculated concession amount."),
+        db_comment="The total concession amount calculated based on the subtotal and discount percentage",
     )
     total_amount = models.DecimalField(
         verbose_name=_("Total Amount"),

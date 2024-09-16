@@ -20,15 +20,17 @@ def update_invoice_total_on_save(sender, instance, created, **kwargs):
 
     try:
         transaction.on_commit(recalculate_total)
-    except IntegrityError as e:
-        logger.error("Integrity error occurred for invoice %s: %s", instance.title, e)
-    except OperationalError as e:
+    except IntegrityError as error:
         logger.error(
-            "Operational error in database for invoice %s: %s", instance.title, e
+            "Integrity error occurred for invoice %s: %s", instance.title, error
         )
-    except ValidationError as e:
-        logger.error("Validation error for invoice %s: %s", instance.title, e)
-    except Exception as e:
+    except OperationalError as error:
+        logger.error(
+            "Operational error in database for invoice %s: %s", instance.title, error
+        )
+    except ValidationError as error:
+        logger.error("Validation error for invoice %s: %s", instance.title, error)
+    except Exception as error:
         logger.exception(
-            "Unexpected error occurred for invoice %s: %s", instance.title, e
+            "Unexpected error occurred for invoice %s: %s", instance.title, error
         )

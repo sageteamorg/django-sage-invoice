@@ -1,171 +1,135 @@
-from datetime import datetime
-from decimal import Decimal
-from unittest import mock
-
 import pytest
+from unittest.mock import patch, MagicMock
 from jinja2.exceptions import TemplateNotFound
-
-from sage_invoice.models import Invoice, InvoiceCategory, InvoiceColumn, Expense
-from sage_invoice.service.discovery import JinjaTemplateDiscovery
 from sage_invoice.service.invoice_create import QuotationService
+from sage_invoice.models import Invoice, Item, Expense
 from sage_invoice.service.total import ExpenseService
+from unittest import mock
+from decimal import Decimal
+from django.core.exceptions import ValidationError
 
 
+@pytest.mark.django_db
 class TestQuotationService:
 
+    @patch('sage_invoice.service.invoice_create.JinjaTemplateDiscovery')
+    def test_init(self, mock_template_discovery):
+        # Test if QuotationService initializes correctly
+        service = QuotationService()
+        assert service.template_discovery == mock_template_discovery.return_value
+        assert service.env is not None
+        mock_template_discovery.assert_called_once_with(
+            models_dir="sage_invoice"  # Default directory
+        )
+
     @pytest.fixture
-    def template_discovery(self):
-        with mock.patch(
-            "os.listdir", return_value=["invoice1.jinja2", "invoice2.jinja2"]
-        ):
-            return JinjaTemplateDiscovery(models_dir="test_templates")
-
-    def test_get_template_path(self, template_discovery):
-        template_path = template_discovery.get_template_path("1")
-        assert template_path is not None
-
-    def test_render_quotation(self, template_discovery):
-        invoice = mock.Mock()
-        invoice.template_choice = "invoice1"
-        invoice.items.all.return_value = []
-        invoice.total.subtotal = 100.00
-        invoice.total.tax_percentage = 10.00
-        invoice.total.tax_amount = 10.00
-        invoice.total.discount_percentage = 5.00
-        invoice.total.discount_amount = 5.00
-        invoice.total.total_amount = 105.00
-        invoice.customer_name = "John Doe"
-        invoice.customer_email = "john.doe@example.com"
-        invoice.invoice_date = datetime(2024, 8, 25)
-        invoice.status = "unpaid"
-        invoice.notes = "Test notes"
-        invoice.logo.url = "test_logo_url"
-        invoice.signature.url = "test_signature_url"
-        invoice.stamp.url = "test_stamp_url"
-        invoice.receipt = False
-
-        with mock.patch("jinja2.Environment.get_template") as mock_get_template:
-            mock_template = mock.Mock()
-            mock_template.render.return_value = "Rendered content"
-            mock_get_template.return_value = mock_template
-
-            service = QuotationService()
-            service.template_discovery = template_discovery
-
-            queryset = mock.Mock()
-            queryset.first.return_value = invoice
-
-            rendered_content = service.render_quotation(queryset)
-
-            mock_get_template.assert_called_once_with("invoice1.jinja2")
-            mock_template.render.assert_called_once()
-            assert rendered_content == "Rendered content"
-
-    def test_invalid_quotation(self, template_discovery):
-        invoice = mock.Mock()
-        invoice.template_choice = "NOTFUND"
-        invoice.items.all.return_value = []
-        invoice.total.subtotal = 100.00
-        invoice.total.tax_percentage = 10.00
-        invoice.total.tax_amount = 10.00
-        invoice.total.discount_percentage = 5.00
-        invoice.total.discount_amount = 5.00
-        invoice.total.total_amount = 105.00
-        invoice.customer_name = "John Doe"
-        invoice.customer_email = "john.doe@example.com"
-        invoice.invoice_date = datetime(2024, 8, 25)
-        invoice.status = "unpaid"
-        invoice.notes = "Test notes"
-        invoice.logo.url = "test_logo_url"
-        invoice.signature.url = "test_signature_url"
-        invoice.stamp.url = "test_stamp_url"
-
-        with mock.patch("jinja2.Environment.get_template") as mock_get_template:
-            mock_template = mock.Mock()
-            mock_template.render.return_value = "Rendered content"
-            mock_get_template.return_value = mock_template
-
-            service = QuotationService()
-            service.template_discovery = template_discovery
-
-            queryset = mock.Mock()
-            queryset.first.return_value = invoice
-            with pytest.raises(TemplateNotFound):
-                service.render_quotation(queryset)
-
-    def test_render_quotation_with_items(self, template_discovery):
-        invoice = mock.Mock()
-        invoice.template_choice = "invoice1"
-
-        item1 = mock.Mock(
-            description="Item 1", quantity=1, unit_price=100.00, total_price=100.00
+    def invoice(self, db):
+        # Create a sample invoice and related items
+        invoice = Invoice.objects.create(
+            title="Test Invoice",
+            invoice_date="2024-09-10",
+            customer_name="Test Customer",
+            tracking_code="INV-2024",
+            status="unpaid",
+            currency="USD",
+            due_date="2024-10-10"
         )
-        item2 = mock.Mock(
-            description="Item 2", quantity=2, unit_price=50.00, total_price=100.00
+        Expense.objects.create(
+            invoice=invoice,
+            subtotal=100,
+            tax_percentage=10,
+            discount_percentage=5,
+            concession_percentage=0,
+            tax_amount=10,
+            discount_amount=5,
+            concession_amount=0,
+            total_amount=105
         )
-        invoice.items.all.return_value = [item1, item2]
+        Item.objects.create(
+            invoice=invoice,
+            description="Test Item",
+            quantity=1,
+            unit_price=100,
+            total_price=100
+        )
+        return invoice
 
-        mock_query_set = mock.Mock()
-        mock_query_set.order_by.return_value = [
-            mock.Mock(column_name="Delivery Date", value="2024-09-01"),
-            mock.Mock(column_name="Warranty Period", value="12 months"),
-        ]
-        InvoiceColumn.objects.filter = mock.Mock(return_value=mock_query_set)
+    @patch('sage_invoice.service.invoice_create.JinjaTemplateDiscovery.get_template_path')
+    def test_render_quotation_success(self, mock_get_template_path, invoice):
+        # Mock template discovery and rendering process
+        mock_template = MagicMock()
+        mock_template.render.return_value = "Rendered HTML"
+        mock_get_template_path.return_value = "path/to/template.html"
 
-        invoice.total.subtotal = 200.00
-        invoice.total.tax_percentage = 10.00
-        invoice.total.tax_amount = 20.00
-        invoice.total.discount_percentage = 5.00
-        invoice.total.discount_amount = 10.00
-        invoice.total.total_amount = 210.00
-        invoice.customer_name = "John Doe"
-        invoice.customer_email = "john.doe@example.com"
-        invoice.invoice_date = datetime(2024, 8, 25)
-        invoice.status = "unpaid"
-        invoice.notes = "Test notes"
-        invoice.logo.url = "test_logo_url"
-        invoice.signature.url = "test_signature_url"
-        invoice.stamp.url = "test_stamp_url"
-        invoice.receipt = False
-        with mock.patch("jinja2.Environment.get_template") as mock_get_template:
-            mock_template = mock.Mock()
-            mock_template.render.return_value = "Rendered content"
-            mock_get_template.return_value = mock_template
+        service = QuotationService()
+        service.env.get_template = MagicMock(return_value=mock_template)
 
-            service = QuotationService()
-            service.template_discovery = template_discovery
+        # Mock the queryset with first method
+        mock_queryset = MagicMock()
+        mock_queryset.first.return_value = invoice
 
-            queryset = mock.Mock()
-            queryset.first.return_value = invoice
+        result = service.render_quotation(mock_queryset)
 
-            rendered_content = service.render_quotation(queryset)
+        assert result == "Rendered HTML"
+        mock_get_template_path.assert_called_once()
+        service.env.get_template.assert_called_once_with("template.html")
+        mock_template.render.assert_called_once()
 
-            mock_get_template.assert_called_once_with("invoice1.jinja2")
-            mock_template.render.assert_called_once()
+    @patch('sage_invoice.service.invoice_create.JinjaTemplateDiscovery.get_template_path')
+    def test_render_quotation_template_not_found(self, mock_get_template_path, invoice):
+        # Test case when template is not found
+        mock_get_template_path.return_value = None
+        service = QuotationService()
 
-            InvoiceColumn.objects.filter.assert_called()
-            assert rendered_content == "Rendered content"
+        # Mock the queryset with first method
+        mock_queryset = MagicMock()
+        mock_queryset.first.return_value = invoice
 
+        with pytest.raises(TemplateNotFound):
+            service.render_quotation(mock_queryset)
 
+        mock_get_template_path.assert_called_once()
+
+    def test_render_contax(self, invoice):
+        # Test context generation for the invoice
+        service = QuotationService()
+
+        # Ensure contacts and other fields are handled correctly
+        invoice.contacts = ["you@example.com", "1234567890"]
+        context = service.render_contax(invoice)
+
+        assert context["title"] == invoice.title
+        assert context["tracking_code"] == invoice.tracking_code
+        assert context["subtotal"] == invoice.total.subtotal
+        assert context["grand_total"] == invoice.total.total_amount
+        assert context["customer_name"] == invoice.customer_name
+        assert len(context["items"]) == invoice.items.count()
+
+    def test_invalid_invoice_due_date(self):
+        # Test validation on due date
+        invoice = Invoice(
+            title="Invalid Invoice",
+            invoice_date="2024-09-10",
+            due_date="2024-09-05",
+            customer_name="Test Customer",
+            tracking_code="INV-2024",
+            status="unpaid",
+            currency="USD"
+        )
+        with pytest.raises(ValidationError):
+            invoice.clean()
+
+@pytest.mark.django_db
 class TestExpenseService:
 
     @pytest.fixture
-    def invoice_category(self, db):
-        """Fixture to create a real InvoiceCategory instance."""
-        return InvoiceCategory.objects.create(
-            title="Default Category", description="A default category for testing."
-        )
-
-    @pytest.fixture
-    def invoice(self, db, invoice_category):
+    def invoice(self, db):
         """Fixture to create a real Invoice instance with items."""
         invoice = Invoice.objects.create(
             title="Test Invoice",
             invoice_date="2024-08-25",
             customer_name="John Doe",
-            customer_email="john.doe@example.com",
             status="unpaid",
-            category=invoice_category,
             due_date="2024-09-01",
         )
         invoice.items.create(
@@ -192,21 +156,20 @@ class TestExpenseService:
         with mock.patch.object(Expense, "save") as mock_save:
             service.calculate_and_save(invoice_total)
 
+            # Verify calculations
             assert invoice_total.subtotal == Decimal("200.00")
             assert invoice_total.tax_amount == Decimal("20.00")
             assert invoice_total.discount_amount == Decimal("10.00")
             assert invoice_total.total_amount == Decimal("210.00")
             mock_save.assert_called_once()
 
-    def test_calculate_and_save_with_no_items(self, db, invoice_category):
+    def test_calculate_and_save_with_no_items(self, db):
         """Test calculate_and_save when the invoice has no items."""
         invoice = Invoice.objects.create(
             title="Empty Invoice",
             invoice_date="2024-08-25",
             customer_name="John Doe",
-            customer_email="john.doe@example.com",
             status="unpaid",
-            category=invoice_category,
             due_date="2024-09-01",
         )
 
@@ -218,9 +181,10 @@ class TestExpenseService:
 
         service = ExpenseService()
 
-        with mock.patch.object(Expense, "save") as mock_save:
+        with mock.patch.object(invoice_total, "save") as mock_save:
             service.calculate_and_save(invoice_total)
 
+            # Verify calculations with no items
             assert invoice_total.subtotal == Decimal("0.00")
             assert invoice_total.tax_amount == Decimal("0.00")
             assert invoice_total.discount_amount == Decimal("0.00")

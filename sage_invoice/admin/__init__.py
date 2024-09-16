@@ -1,4 +1,4 @@
-from .category import InvoiceCategoryAdmin
+from .category import CategoryAdmin
 from .invoice import InvoiceAdmin
 
-__all__ = ["InvoiceAdmin", "InvoiceCategoryAdmin"]
+__all__ = ["InvoiceAdmin", "CategoryAdmin"]

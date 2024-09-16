@@ -42,7 +42,7 @@
                   <b class="tm_accent_color tm_f26 tm_medium tm_body_lineheight">{{ title }}</b>
                 </div>
                 <div>
-                  <b class="tm_accent_color tm_f26 tm_medium tm_body_lineheight">Total: {{ grand_total }}</b>
+                  <b class="tm_accent_color tm_f26 tm_medium tm_body_lineheight">Total: {{ grand_total }} {{ currency }}</b>
                 </div>
               </div>
             </div>
@@ -75,8 +75,8 @@
                       <th class="tm_width_2 tm_semi_bold tm_accent_color tm_accent_bg_10">{{ column }}</th>
                       {% endfor %}
                       <th class="tm_width_1 tm_semi_bold tm_accent_color tm_accent_bg_10">Quantity</th>
-                      <th class="tm_width_2 tm_semi_bold tm_accent_color tm_accent_bg_10 tm_text_right">Unit Price (QAR)</th>
-                      <th class="tm_width_2 tm_semi_bold tm_accent_color tm_accent_bg_10 tm_text_right">Total Price (QAR)</th>
+                      <th class="tm_width_2 tm_semi_bold tm_accent_color tm_accent_bg_10 tm_text_right">Unit Price</th>
+                      <th class="tm_width_2 tm_semi_bold tm_accent_color tm_accent_bg_10 tm_text_right">Total Price</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -87,9 +87,9 @@
                       {% for column in custom_columns %}
                       <td class="tm_width_2 tm_accent_border_20">{{ item.custom_data|get_item:column }}</td>
                       {% endfor %}
-                      <td class="tm_width_1 tm_accent_border_20">{{ item.quantity }}</td>
-                      <td class="tm_width_2 tm_accent_border_20 tm_text_right">{{ item.unit_price }}</td>
-                      <td class="tm_width_2 tm_accent_border_20 tm_text_right">{{ item.total_price }}</td>
+                      <td class="tm_width_1 tm_accent_border_20">{{ item.quantity }} {{ item.measurement }}</td>
+                      <td class="tm_width_2 tm_accent_border_20 tm_text_right">{{ item.unit_price }} {{ currency  }}</td>
+                      <td class="tm_width_2 tm_accent_border_20 tm_text_right">{{ item.total_price }} {{ currency }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -98,19 +98,21 @@
             </div>
             <div class="tm_invoice_footer tm_mb15 tm_m0_md">
               <div class="tm_left_footer">
-                <p class="tm_mb2"><b class="tm_primary_color">Payment info:</b></p>
-                <p class="tm_m0">{{ payment_info }}</p>
               </div>
               <div class="tm_right_footer">
                 <table class="tm_mb15 tm_m0_md">
                   <tbody>
                     <tr>
                       <td class="tm_width_3 tm_primary_color tm_border_none tm_medium">Subtotal</td>
-                      <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_medium">{{ subtotal }}</td>
+                      <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_medium">{{ subtotal }} {{ currency }}</td>
                     </tr>
                     <tr>
                       <td class="tm_width_3 tm_danger_color tm_border_none tm_pt0">Discount {{ discount_percentage }}%</td>
                       <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">-{{ discount_amount }}</td>
+                    </tr>
+                    <tr>
+                      <td class="tm_width_3 tm_danger_color tm_border_none tm_pt0">Concession {{ concession_percentage }}%</td>
+                      <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">-{{ concession_amount }}</td>
                     </tr>
                     <tr>
                       <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Tax {{ tax_percentage }}%</td>
@@ -118,7 +120,7 @@
                     </tr>
                     <tr class="tm_accent_border_20 tm_border">
                       <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_accent_bg_10">Grand Total</td>
-                      <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_text_right tm_accent_bg_10">{{ grand_total }}</td>
+                      <td class="tm_width_3 tm_bold tm_f16 tm_border_top_0 tm_accent_color tm_text_right tm_accent_bg_10">{{ grand_total }} {{ currency }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -138,8 +140,6 @@
           <div class="tm_bottom_invoice tm_accent_border_20">
             <div class="tm_bottom_invoice_left">
               <p class="tm_m0 tm_f18 tm_accent_color tm_mb5">Thank you for your business.</p>
-              <p class="tm_primary_color tm_f12 tm_m0 tm_bold">Terms & Condition</p>
-              <p class="tm_m0 tm_f12">{{ notes }}</p>
             </div>
             <div class="tm_bottom_invoice_right tm_mobile_hide">
               {% if logo_url %}
@@ -147,6 +147,18 @@
               {% endif %}
             </div>
           </div>
+          {% for field in additional_fields %}
+              <div class="tm_padd_15_20 tm_round_border tm_mb15">
+                  <div class="tm_note_section">
+                  <p class="tm_mb5"><b class="tm_primary_color">{{ field.label }}:</b></p>
+                      <ul class="tm_m0 tm_note_list">
+                        {% for sentence in field.content|split_by_period %}
+                          <li>{{ sentence }}</li>
+                        {% endfor %}
+                      </ul>
+                  </div>
+                </div>
+          {% endfor %}
         </div>
       </div>
       <div class="tm_invoice_btns tm_hide_print">

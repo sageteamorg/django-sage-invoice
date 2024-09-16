@@ -71,6 +71,7 @@
                             <p>
                                 {{ customer_name }}<br>
                                 {{ customer_email }}
+                                {{ customer_phone}}
                             </p>
                         </div>
                     </div>
@@ -98,9 +99,9 @@
                                             {% for column in custom_columns %}
                                                 <td class="tm_width_2">{{ item.custom_data|get_item:column }}</td>
                                             {% endfor %}
-                                            <td class="tm_width_1">{{ item.quantity }}</td>
-                                            <td class="tm_width_2 tm_text_right">{{ item.unit_price }}</td>
-                                            <td class="tm_width_2 tm_text_right">{{ item.total_price }}</td>
+                                            <td class="tm_width_1">{{ item.quantity }} {{ item.measurement }}</td>
+                                            <td class="tm_width_2 tm_text_right">{{ item.unit_price }} {{ currency }}</td>
+                                            <td class="tm_width_2 tm_text_right">{{ item.total_price }} {{ currency }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -117,11 +118,15 @@
                                     <tbody>
                                         <tr>
                                             <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Subtotal</td>
-                                            <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ subtotal }}</td>
+                                            <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ subtotal }} {{ currency }}</td>
                                         </tr>
                                         <tr>
                                             <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Discount <span class="tm_ternary_color">({{ discount_percentage }}%)</span></td>
                                             <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">-{{ discount_amount }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Concession <span class="tm_ternary_color">({{ concession_percentage }}%)</span></td>
+                                            <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">-{{ concession_amount }}</td>
                                         </tr>
                                         <tr>
                                             <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Tax <span class="tm_ternary_color">({{ tax_percentage }}%)</span></td>
@@ -129,7 +134,7 @@
                                         </tr>
                                         <tr class="tm_border_top tm_border_bottom">
                                             <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color">Grand Total</td>
-                                            <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">{{ grand_total }}</td>
+                                            <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">{{ grand_total }} {{ currency }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -145,9 +150,19 @@
                     </div>
                     <!-- Terms & Conditions -->
                     <div class="tm_padd_15_20">
-                        <p class="tm_mb2"><b class="tm_primary_color">Terms & Conditions:</b></p>
-                        <p class="tm_m0">{{ notes }}</p>
                     </div>
+                    {% for field in additional_fields %}
+                    <div class="tm_padd_15_20 tm_round_border tm_mb15">
+                        <div class="tm_note_section">
+                        <p class="tm_mb5"><b class="tm_primary_color">{{ field.label }}:</b></p>
+                        <ul class="tm_m0 tm_note_list">
+                            {% for sentence in field.content|split_by_period %}
+                            <li>{{ sentence }}</li>
+                            {% endfor %}
+                        </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             <!-- Print Button -->
