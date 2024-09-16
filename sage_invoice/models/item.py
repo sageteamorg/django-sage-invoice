@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class InvoiceItem(models.Model):
+class Item(models.Model):
     description = models.CharField(
         max_length=255,
         verbose_name=_("Description"),
@@ -14,6 +14,14 @@ class InvoiceItem(models.Model):
         default=1,
         help_text=_("The quantity of the item."),
         db_comment="The quantity of the invoice item",
+    )
+    measurement = models.CharField(
+        max_length=255,
+        verbose_name=_("measurement"),
+        help_text=_("measurement of the quantity."),
+        db_comment="measurement gavin more info about the item quantity",
+        null=True,
+        blank=True,
     )
     unit_price = models.DecimalField(
         max_digits=10,
@@ -48,9 +56,9 @@ class InvoiceItem(models.Model):
         return f"{self.description} - {self.quantity} x {self.unit_price}"
 
     def __repr__(self):
-        return f"Invoice item> {self.description} - {self.quantity} x {self.unit_price}"
+        return f"Items> {self.description} - {self.quantity} x {self.unit_price}"
 
     class Meta:
-        verbose_name = _("Invoice Item")
-        verbose_name_plural = _("Invoice Items")
+        verbose_name = _("Item")
+        verbose_name_plural = _("Items")
         db_table = "sage_invoice_items"

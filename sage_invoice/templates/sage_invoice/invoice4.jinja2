@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Laralink">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ static('assets/css/style.css') }}">
+</head>
+<body>
+  <div class="tm_container">
+    <div class="tm_invoice_wrap">
+      <div class="tm_invoice tm_style1" id="tm_download_section">
+        <div class="tm_invoice_in">
+          <div class="tm_invoice_head tm_align_center tm_mb20">
+            <div class="tm_invoice_left">
+              {% if logo_url %}
+              <div class="tm_logo"><img src="{{ logo_url }}" alt="Logo"></div>
+              {% endif %}
+            </div>
+            <div class="tm_invoice_right tm_text_right">
+              <div class="tm_primary_color tm_f50 tm_text_uppercase">{{ title }}</div>
+            </div>
+          </div>
+          <div class="tm_invoice_info tm_mb20">
+            <div class="tm_invoice_seperator tm_gray_bg"></div>
+            <div class="tm_invoice_info_list">
+              <p class="tm_invoice_number tm_m0">Invoice No: <b class="tm_primary_color">{{ tracking_code }}</b></p>
+              <p class="tm_invoice_date tm_m0">Date: <b class="tm_primary_color">{{ invoice_date }}</b></p>
+            </div>
+          </div>
+          <div class="tm_invoice_head tm_mb10">
+            <div class="tm_invoice_left">
+              <p class="tm_mb2"><b class="tm_primary_color">Invoice To:</b></p>
+              <p>
+                {{ customer_name }} <br>
+                {{ customer_email }} <br />
+              </p>
+            </div>
+            <div class="tm_invoice_right tm_text_right">
+              <p class="tm_mb2"><b class="tm_primary_color">Pay To:</b></p>
+              <p>
+                Your Company Name <br>
+                Company Address <br />
+              </p>
+            </div>
+          </div>
+
+          <div class="tm_table tm_style1 tm_mb30">
+            <div class="tm_round_border">
+              <div class="tm_table_responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="tm_width_3 tm_semi_bold tm_primary_color tm_gray_bg">Item</th>
+                      <th class="tm_width_4 tm_semi_bold tm_primary_color tm_gray_bg">Description</th>
+                      <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Price</th>
+                      <th class="tm_width_1 tm_semi_bold tm_primary_color tm_gray_bg">Qty</th>
+                      <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
+                      {% for column in custom_columns %}
+                      <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">{{ column }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in items %}
+                    <tr>
+                      <td class="tm_width_3">{{ loop.index }}. {{ item.description }}</td>
+                      <td class="tm_width_4">{{ item.custom_data.get('description', '') }}</td>
+                      <td class="tm_width_2">{{ item.unit_price }}</td>
+                      <td class="tm_width_1">{{ item.quantity }}</td>
+                      <td class="tm_width_2 tm_text_right">{{ item.total_price }}</td>
+                      {% for column in custom_columns %}
+                      <td class="tm_width_2">{{ item.custom_data.get(column, '') }}</td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="tm_padd_15_20 tm_round_border tm_mb15">
+            <p class="tm_mb5"><b class="tm_primary_color">Terms & Conditions:</b></p>
+            <ul class="tm_m0 tm_note_list">
+              {% for term in additional_fields.get('Terms & Conditions', []) %}
+              <li>{{ term }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="tm_padd_15_20 tm_round_border tm_mb15">
+            {% for field in additional_fields %}
+            <div class="tm_note_section">
+              <p class="tm_mb5"><b class="tm_primary_color">{{ field.label }}:</b></p>
+              <ul class="tm_m0 tm_note_list">
+                <li>{{ field.content | safe }}</li>
+              </ul>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="tm_invoice_footer">
+            <div class="tm_left_footer">
+              <p class="tm_mb2"><b class="tm_primary_color">Payment info:</b></p>
+              <p class="tm_m0">{{ status }}</p>
+            </div>
+            <div class="tm_right_footer">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Subtotal</td>
+                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ subtotal }}</td>
+                  </tr>
+                  <tr>
+                    <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Tax ({{ tax_percentage }}%)</td>
+                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">{{ tax_amount }}</td>
+                  </tr>
+                  <tr>
+                    <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Discount ({{ discount_percentage }}%)</td>
+                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">-{{ discount_amount }}</td>
+                  </tr>
+                  <tr class="tm_border_top tm_border_bottom">
+                    <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color">Grand Total</td>
+                    <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">{{ grand_total }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jspdf.min.js"></script>
+  <script src="assets/js/html2canvas.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

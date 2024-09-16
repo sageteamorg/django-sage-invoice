@@ -1,7 +1,5 @@
 import logging
 import os
-import secrets
-from datetime import datetime
 from typing import Any, Dict
 
 from django.conf import settings
@@ -9,7 +7,7 @@ from django.db.models import QuerySet
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.exceptions import TemplateNotFound
 
-from sage_invoice.models import InvoiceColumn
+from sage_invoice.models import Column
 
 from .discovery import JinjaTemplateDiscovery
 
@@ -37,19 +35,6 @@ class QuotationService:
             "Template discovery set to directory: %s",
             self.template_discovery.models_dir,
         )
-
-    def generate_tracking_code(self, user_input: str, creation_date: datetime) -> str:
-        """Generate a unique tracking code based on user input and the creation
-        date.
-
-        Returns:
-            str: A unique tracking code.
-        """
-        date_str = creation_date.strftime("%Y%m%d")
-        random_number = secrets.randbelow(8000) + 1000
-        tracking_code = f"{user_input}-{date_str}-{random_number}"
-        logger.info("Generated tracking code: %s", tracking_code)
-        return tracking_code
 
     def render_quotation(self, queryset: QuerySet) -> str:
         """Render the quotation for the given queryset.
@@ -90,20 +75,30 @@ class QuotationService:
             Dict[str, Any]: The context data for rendering the quotation.
         """
         logger.info("Preparing context data for quotation")
-        invoice = queryset.first()
+        invoice = queryset
         total = invoice.total
         items = invoice.items.all()
-
+        email = None
+        phone = ""
         item_list = []
         custom_columns = set()
+        additional_fields = invoice.notes if hasattr(invoice, "notes") else []
+        contacts = invoice.contacts
+
+        for contact in contacts:
+            if "@" in contact and not email:
+                email = contact
+            elif contact.isdigit() and not phone:
+                phone = contact
 
         for item in items:
-            custom_data = InvoiceColumn.objects.filter(item=item).order_by("priority")
+            custom_data = Column.objects.filter(item=item).order_by("priority")
             custom_fields = {data.column_name: data.value for data in custom_data}
             custom_columns.update(custom_fields.keys())
             item_dict = {
                 "description": item.description,
                 "quantity": item.quantity,
+                "measurement": item.measurement if item.measurement else "",
                 "unit_price": item.unit_price,
                 "total_price": item.total_price,
                 "custom_data": custom_fields,
@@ -112,26 +107,28 @@ class QuotationService:
 
         context = {
             "title": invoice.title,
-            "tracking_code": self.generate_tracking_code(
-                invoice.tracking_code, invoice.invoice_date
-            ),
+            "tracking_code": invoice.tracking_code,
             "items": item_list,
             "subtotal": total.subtotal,
             "tax_percentage": total.tax_percentage,
             "tax_amount": total.tax_amount,
             "discount_percentage": total.discount_percentage,
             "discount_amount": total.discount_amount,
+            "concession_percentage": total.concession_percentage,
+            "concession_amount": total.concession_amount,
             "grand_total": total.total_amount,
             "invoice_date": invoice.invoice_date,
             "customer_name": invoice.customer_name,
-            "customer_email": invoice.customer_email,
+            "customer_email": email,
+            "customer_phone": phone,
             "due_date": invoice.due_date,
             "status": invoice.status,
-            "notes": invoice.notes,
+            "currency": invoice.currency,
             "logo_url": invoice.logo.url if invoice.logo else None,
             "sign_url": invoice.signature.url if invoice.signature else None,
             "stamp_url": invoice.stamp.url if invoice.stamp else None,
             "custom_columns": custom_columns,
+            "additional_fields": additional_fields,
         }
 
         logger.info("Context prepared for invoice: %s", invoice.title)

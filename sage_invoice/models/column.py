@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class InvoiceColumn(models.Model):
+class Column(models.Model):
     priority = models.PositiveIntegerField(
         verbose_name=_("Priority"),
         help_text=_("The priority associated with each custom column."),
@@ -30,7 +30,7 @@ class InvoiceColumn(models.Model):
         db_comment="invoice of the custom column",
     )
     item = models.ForeignKey(
-        "InvoiceItem",
+        "Item",
         on_delete=models.CASCADE,
         related_name="columns",
         verbose_name=_("Item"),
@@ -42,10 +42,10 @@ class InvoiceColumn(models.Model):
         return f"{self.column_name}"
 
     def __repr__(self) -> str:
-        return f"Invoice Column> {self.column_name}"
+        return f"Column> {self.column_name}"
 
     class Meta:
-        verbose_name = _("Invoice Column")
-        verbose_name_plural = _("Invoice Columns")
+        verbose_name = _("Column")
+        verbose_name_plural = _("Columns")
         db_table = "sage_invoice_columns"
         ordering = ["priority"]

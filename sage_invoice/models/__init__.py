@@ -1,7 +1,7 @@
+from .category import Category
+from .column import Column
+from .expense import Expense
 from .invoice import Invoice
-from .invoice_category import InvoiceCategory
-from .invoice_column import InvoiceColumn
-from .invoice_item import InvoiceItem
-from .invoice_total import Expense
+from .item import Item
 
-__all__ = ["Invoice", "InvoiceColumn", "InvoiceItem", "Expense", "InvoiceCategory"]
+__all__ = ["Invoice", "Column", "Item", "Expense", "Category"]
