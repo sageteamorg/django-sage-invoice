@@ -621,13 +621,13 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django"
-version = "5.1.1"
+version = "5.1.2"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "Django-5.1.1-py3-none-any.whl", hash = "sha256:71603f27dac22a6533fb38d83072eea9ddb4017fead6f67f2562a40402d61c3f"},
-    {file = "Django-5.1.1.tar.gz", hash = "sha256:021ffb7fdab3d2d388bc8c7c2434eb9c1f6f4d09e6119010bbb1694dda286bc2"},
+    {file = "Django-5.1.2-py3-none-any.whl", hash = "sha256:f11aa87ad8d5617171e3f77e1d5d16f004b79a2cf5d2e1d2b97a6a1f8e9ba5ed"},
+    {file = "Django-5.1.2.tar.gz", hash = "sha256:bd7376f90c99f96b643722eee676498706c9fd7dc759f55ebfaf2c08ebcdf4f0"},
 ]
 
 [package.dependencies]
@@ -695,13 +695,13 @@ django = ">=2.0"
 
 [[package]]
 name = "django-sage-tools"
-version = "0.2.2"
+version = "0.3.5"
 description = "Reusable, generic mixins for Django"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "django_sage_tools-0.2.2-py3-none-any.whl", hash = "sha256:9244160056dd3907ac85e7888665ed7eed93b0fc2780e444e2b29eee0024372a"},
-    {file = "django_sage_tools-0.2.2.tar.gz", hash = "sha256:b8b87e1c950b16a73ae4797ee0ac0383a34cedb4fb432143c4913054007aeb14"},
+    {file = "django_sage_tools-0.3.5-py3-none-any.whl", hash = "sha256:e511bcc8f682402d6710e0755dedc622c00bc78d0537d81f3997203ab65fde68"},
+    {file = "django_sage_tools-0.3.5.tar.gz", hash = "sha256:c825f80ca2bc10b2c61ad5ab3176d32cc66d324886eaaf8fdb2362d1bd0379f8"},
 ]
 
 [package.dependencies]
@@ -2139,4 +2139,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "0aab8579cac4bd5661ca0b8e83c03b15e686f5414ffa39dd3c533b6621c7a870"
+content-hash = "217e1bed544ad6685afbaf0dbf92b36a0f207a7e33014bca345d1a64d84e78f3"

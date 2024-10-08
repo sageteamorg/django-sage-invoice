@@ -4,7 +4,7 @@ requires = [ "poetry-core" ]
 
 [tool.poetry]
 name = "django-sage-invoice"
-version = "0.1.1"
+version = "0.1.2"
 description = "A project for invoice generation and NFC integration."
 authors = [ "Radin Ghahremani <radin@sageteam.org>", "Sepehr Akbarzadeh <sepehr@sageteam.org>" ]
 keywords = [ "django", "invoice", "sageteam", "django-packages" ]
@@ -36,10 +36,10 @@ django = [
 ]
 jinja2 = "^3.1.4"
 pillow = "^10.4.0"
-django-sage-tools = "^0.2.2"
 django-import-export = "^4.1.1"
 bandit = { extras = [ "toml" ], version = "^1.7.9" }
 django-jsonform = "^2.22.0"
+django-sage-tools = "^0.3.5"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.1"
