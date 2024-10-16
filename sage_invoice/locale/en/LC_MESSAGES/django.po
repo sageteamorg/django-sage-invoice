@@ -1,0 +1,345 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-16 22:32+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\sage_invoice\admin\category.py:18
+msgid "Category Details"
+msgstr ""
+
+#: .\sage_invoice\admin\category.py:26
+msgid "Details of the invoice category including title and description."
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:53
+msgid "Invoice Details"
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:67
+msgid ""
+"\n"
+"                        Basic details of the invoice including title, date,\n"
+"                        and customer information."
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:74
+msgid "Status & Currency"
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:78
+msgid "Current status of the invoice and any additional notes."
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:85
+msgid "Design Elements"
+msgstr ""
+
+#: .\sage_invoice\admin\invoice.py:94
+msgid "Design-related elements like logo, and template choice."
+msgstr ""
+
+#: .\sage_invoice\apps.py:8
+msgid "Invoice Management"
+msgstr ""
+
+#: .\sage_invoice\models\category.py:9 .\sage_invoice\models\item.py:8
+msgid "Description"
+msgstr ""
+
+#: .\sage_invoice\models\category.py:12
+msgid "Description of the Category."
+msgstr ""
+
+#: .\sage_invoice\models\category.py:20 .\sage_invoice\models\invoice.py:117
+msgid "Category"
+msgstr ""
+
+#: .\sage_invoice\models\category.py:21
+msgid "Categories "
+msgstr ""
+
+#: .\sage_invoice\models\column.py:7
+msgid "Priority"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:8
+msgid "The priority associated with each custom column."
+msgstr ""
+
+#: .\sage_invoice\models\column.py:13
+msgid "Column Name"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:15
+msgid ""
+"The name of the custom column (e.g., 'Delivery Date', 'Warranty Period')."
+msgstr ""
+
+#: .\sage_invoice\models\column.py:20
+msgid "Value"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:21
+msgid "The value for the custom column in the specific invoice."
+msgstr ""
+
+#: .\sage_invoice\models\column.py:28 .\sage_invoice\models\expense.py:74
+#: .\sage_invoice\models\invoice.py:178 .\sage_invoice\models\item.py:46
+msgid "Invoice"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:29
+msgid "The invoice associated with this custom column."
+msgstr ""
+
+#: .\sage_invoice\models\column.py:36 .\sage_invoice\models\item.py:62
+msgid "Item"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:37
+msgid "The item associated with this custom column."
+msgstr ""
+
+#: .\sage_invoice\models\column.py:48
+msgid "Column"
+msgstr ""
+
+#: .\sage_invoice\models\column.py:49
+msgid "Columns"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:9
+msgid "Subtotal"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:13
+msgid "The sum of all item totals."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:17
+msgid "Tax Percentage"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:21
+msgid "The tax percentage applied to the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:25
+msgid "Discount Percentage"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:29
+msgid "The discount percentage applied to the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:33
+msgid "Concession Percentage"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:37
+msgid "The concession percentage applied to the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:41
+msgid "Tax Amount"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:45
+msgid "The calculated tax amount."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:49
+msgid "Discount Amount"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:53
+msgid "The calculated discount amount."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:57
+msgid "Concession Amount"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:61
+msgid "The calculated concession amount."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:65
+msgid "Total Amount"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:69
+msgid "The final total after applying tax and discount."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:77
+msgid "The invoice associated with this total."
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:88
+msgid "Expense"
+msgstr ""
+
+#: .\sage_invoice\models\expense.py:89
+msgid "Expenses"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:14
+msgid "Invoice Date"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:15
+msgid "The date when the invoice was created."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:20
+msgid "Customer Name"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:21
+msgid "The name of the customer."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:26
+msgid "Tracking Code"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:28
+msgid ""
+"Enter the first 3-4 characters of the tracking code. The full code will be "
+"auto-generated as <prefix> + <date> + <random number>."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:73
+msgid "Status"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:74
+msgid "The current status of the invoice (Paid, Unpaid)."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:78
+msgid "Receipt"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:80
+msgid "Is this a receipt or an invoice"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:84
+msgid "Notes"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:118
+msgid "The category associated with this invoice."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:126
+msgid "Currency of unit price"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:130
+msgid "Due Date"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:131
+msgid "The date by which the invoice should be paid."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:138
+msgid "Logo"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:139
+msgid "The logo displayed on the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:146
+msgid "Signature"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:147
+msgid "The signature image for the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:154
+msgid "Stamp"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:155
+msgid "The stamp image for the invoice."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:159
+msgid "Template choice"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:162
+msgid "The template you want for your invoice"
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:168
+msgid "Due Date must be later than Invoice Date."
+msgstr ""
+
+#: .\sage_invoice\models\invoice.py:179
+msgid "Invoices"
+msgstr ""
+
+#: .\sage_invoice\models\item.py:9
+msgid "Description of the item."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:13
+msgid "Quantity"
+msgstr ""
+
+#: .\sage_invoice\models\item.py:15
+msgid "The quantity of the item."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:20
+msgid "measurement"
+msgstr ""
+
+#: .\sage_invoice\models\item.py:21
+msgid "measurement of the quantity."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:29
+msgid "Unit Price"
+msgstr ""
+
+#: .\sage_invoice\models\item.py:30
+msgid "The price per unit of the item."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:36
+msgid "Total Price"
+msgstr ""
+
+#: .\sage_invoice\models\item.py:38
+msgid "Auto Generated total price for this item (quantity * unit price)."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:47
+msgid "The invoice associated with this item."
+msgstr ""
+
+#: .\sage_invoice\models\item.py:63
+msgid "Items"
+msgstr ""
