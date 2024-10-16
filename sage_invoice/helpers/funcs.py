@@ -7,29 +7,22 @@ from django.conf import settings
 from sage_invoice.service.discovery import JinjaTemplateDiscovery
 
 
-def get_template_choices(is_receipt=False):
-    """Dynamically generates the template choices based on the templates Only
-    the base name of the template is shown in the choices.
+def get_template_choices():
     """
-    template_discovery = JinjaTemplateDiscovery(
-        models_dir=getattr(settings, "SAGE_MODEL_TEMPLATE", "sage_invoice")
-    )
+    Returns a combined list of default and custom templates, formatted for use in a
+    model's choices field.
+    """
+    discovery = JinjaTemplateDiscovery()
+    default_templates = discovery.get_default_templates()
+    custom_templates = discovery.get_custom_templates()
 
-    templates = (
-        template_discovery.receipt_templates
-        if is_receipt
-        else template_discovery.SAGE_MODEL_TEMPLATEs
-    )
+    choices = [(template, template) for template in default_templates]
+    choices += [(template, template) for template in custom_templates]
 
-    choices = [
-        (
-            key,
-            f"{os.path.basename(value).replace('.jinja2', '').replace('_', ' ').title()} Template",
-        )
-        for key, value in templates.items()
-    ]
+    if not choices:
+        return [("", "No templates available")]
 
-    return choices or [("", "No Templates Available")]
+    return choices
 
 
 def generate_tracking_code(user_input: str, creation_date: datetime) -> str:
