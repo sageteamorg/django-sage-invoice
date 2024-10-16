@@ -15,7 +15,7 @@ class TestHelperFunctions:
         """Test template choices for an invoice (non-receipt)."""
         mock_settings.SAGE_MODEL_TEMPLATE = "sage_invoice"
         mock_discovery_instance = mock_discovery.return_value
-        mock_discovery_instance.SAGE_MODEL_TEMPLATEs = {
+        mock_discovery_instance.SAGE_MODEL_TEMPLATE = {
             "template1": "/path/to/template1.jinja2",
             "template2": "/path/to/template2.jinja2"
         }
@@ -51,7 +51,7 @@ class TestHelperFunctions:
         """Test when no templates are available."""
         with mock.patch("sage_invoice.helpers.funcs.JinjaTemplateDiscovery") as mock_discovery:
             mock_discovery_instance = mock_discovery.return_value
-            mock_discovery_instance.SAGE_MODEL_TEMPLATEs = {}
+            mock_discovery_instance.SAGE_MODEL_TEMPLATE = {}
             mock_discovery_instance.receipt_templates = {}
 
             choices = get_template_choices(is_receipt=False)
