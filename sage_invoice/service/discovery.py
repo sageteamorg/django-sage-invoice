@@ -49,8 +49,8 @@ class JinjaTemplateDiscovery:
 
         templates = []
         for filename in os.listdir(directory):
-            if filename.endswith(".jinja2") and (
-                not prefix or filename.startswith(prefix)
-            ):
-                templates.append(filename)
+            if filename.endswith(".jinja2"):
+                # Match filenames that start with the prefix (case-insensitive)
+                if prefix is None or filename.lower().startswith(prefix.lower()):
+                    templates.append(filename)
         return templates
