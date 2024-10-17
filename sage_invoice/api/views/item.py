@@ -1,7 +1,8 @@
 # views.py
 from rest_framework import viewsets
-from sage_invoice.models import Item
+
 from sage_invoice.api.serializers import ItemSerializer
+from sage_invoice.models import Item
 
 
 class ItemViewSet(viewsets.ModelViewSet):

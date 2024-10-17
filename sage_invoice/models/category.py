@@ -1,19 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from sage_tools.mixins.models import TitleSlugMixin
+from sage_tools.mixins.models import TitleSlugDescriptionMixin
 
 
-class Category(TitleSlugMixin):
-    description = models.CharField(
-        max_length=255,
-        verbose_name=_("Description"),
-        null=True,
-        blank=True,
-        help_text=_("Description of the Category."),
-        db_comment="Description of the Category",
-    )
-
+class Category(TitleSlugDescriptionMixin):
     def __str__(self):
+        return f"{self.title}"
+
+    def __repr__(self):
         return f"{self.title}"
 
     class Meta:

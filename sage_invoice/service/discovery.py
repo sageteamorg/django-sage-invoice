@@ -10,9 +10,7 @@ class JinjaTemplateDiscovery:
         self.sage_template_dir = (
             settings.SAGE_MODEL_TEMPLATE
         )  # custom templates folder name
-        self.sage_template_prefix = (
-            settings.SAGE_MODEL_PREFIX
-        )  # custom template prefix
+        self.sage_template_prefix = settings.SAGE_MODEL_PREFIX  # custom template prefix
 
     def get_default_templates(self):
         """Return a list of default templates found in the package's template directory."""
@@ -49,10 +47,12 @@ class JinjaTemplateDiscovery:
 
         templates = []
         for filename in os.listdir(directory):
-            if filename.endswith(".jinja2") and (not prefix or filename.startswith(prefix)):
+            if filename.endswith(".jinja2") and (
+                not prefix or filename.startswith(prefix)
+            ):
                 templates.append(filename)
 
         # Remove the .jinja2 extension from the filenames
-        filenames = list(map(lambda x: x.replace('.jinja2', ''), templates))
-        
+        filenames = list(map(lambda x: x.replace(".jinja2", ""), templates))
+
         return filenames

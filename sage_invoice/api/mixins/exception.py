@@ -1,17 +1,24 @@
 import logging
 import uuid
+
 from django.utils.timezone import now
-from rest_framework.views import exception_handler
-from rest_framework.exceptions import ValidationError, NotFound, APIException, NotAcceptable
 from rest_framework import status
+from rest_framework.exceptions import (
+    APIException,
+    NotAcceptable,
+    NotFound,
+    ValidationError,
+)
 from rest_framework.response import Response
+from rest_framework.views import exception_handler
 
 # Get the logger instance
 logger = logging.getLogger(__name__)
 
+
 class ErrorHandlingMixin:
     """
-    Mixin to provide consistent error handling across APIs, 
+    Mixin to provide consistent error handling across APIs,
     including structured error responses, logging, and trace IDs.
     """
 
@@ -25,9 +32,9 @@ class ErrorHandlingMixin:
 
         # Generate a unique trace ID for this request
         trace_id = str(uuid.uuid4())
-        
+
         # Path from the current request
-        path = self.request.path if hasattr(self, 'request') else 'unknown'
+        path = self.request.path if hasattr(self, "request") else "unknown"
 
         # Default error structure
         error_response = {
@@ -36,32 +43,32 @@ class ErrorHandlingMixin:
             "details": [],
             "path": path,
             "traceId": trace_id,
-            "timestamp": now().isoformat()
+            "timestamp": now().isoformat(),
         }
 
         # Handle specific exceptions for better detail
         if isinstance(exc, ValidationError):
-            error_response['code'] = "VALIDATION_ERROR"
-            error_response['message'] = "Invalid input parameters"
-            error_response['details'] = [
+            error_response["code"] = "VALIDATION_ERROR"
+            error_response["message"] = "Invalid input parameters"
+            error_response["details"] = [
                 {"field": field, "message": msg[0] if isinstance(msg, list) else msg}
                 for field, msg in exc.detail.items()
             ]
             status_code = status.HTTP_400_BAD_REQUEST
 
         elif isinstance(exc, NotFound):
-            error_response['code'] = "NOT_FOUND"
-            error_response['message'] = str(exc)
+            error_response["code"] = "NOT_FOUND"
+            error_response["message"] = str(exc)
             status_code = status.HTTP_404_NOT_FOUND
 
         elif isinstance(exc, NotAcceptable):
-            error_response['code'] = "NOT_ACCEPTABLE"
-            error_response['message'] = str(exc)
+            error_response["code"] = "NOT_ACCEPTABLE"
+            error_response["message"] = str(exc)
             status_code = status.HTTP_406_NOT_ACCEPTABLE
 
         elif isinstance(exc, APIException):
-            error_response['code'] = exc.get_codes() if exc.get_codes() else "API_ERROR"
-            error_response['message'] = str(exc)
+            error_response["code"] = exc.get_codes() if exc.get_codes() else "API_ERROR"
+            error_response["message"] = str(exc)
             status_code = exc.status_code
 
         else:
@@ -77,16 +84,20 @@ class ErrorHandlingMixin:
             response = Response(error_response, status=status_code)
 
         # Log the error details with trace ID for correlation
-        logger.error(f"Error occurred [traceId={trace_id}] at {path}: {exc}", exc_info=True)
+        logger.error(
+            f"Error occurred [traceId={trace_id}] at {path}: {exc}", exc_info=True
+        )
 
         return response
 
     def get_exception_handler_context(self):
         """
-        This method returns the context that will be passed to the DRF exception handler.
+        This method returns the context that will be passed to the DRF exception
+        handler.
+
         It's useful to provide additional request-related context (like view, request, args).
         """
         return {
-            'view': self,
-            'request': self.request,
+            "view": self,
+            "request": self.request,
         }

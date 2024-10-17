@@ -1,7 +1,8 @@
 # views.py
 from rest_framework import viewsets
-from sage_invoice.models import Column
+
 from sage_invoice.api.serializers import ColumnSerializer
+from sage_invoice.models import Column
 
 
 class ColumnViewSet(viewsets.ModelViewSet):

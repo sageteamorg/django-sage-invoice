@@ -1,10 +1,10 @@
-from django.views import View
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.generic import TemplateView, DetailView
-from django.template.loader import render_to_string
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views import View
+from django.views.generic import DetailView, TemplateView
 
 from sage_invoice.helpers.funcs import get_template_choices
 from sage_invoice.models import Invoice
@@ -14,7 +14,9 @@ from sage_invoice.service.invoice_create import QuotationService
 class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Invoice
     context_object_name = "invoice"
-    queryset = Invoice.objects.select_related("category", "expense").prefetch_related("items", "columns")
+    queryset = Invoice.objects.select_related("category", "expense").prefetch_related(
+        "items", "columns"
+    )
 
     def test_func(self):
         # Ensure that the user is a staff member
@@ -36,8 +38,12 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         # Add additional context using the service class
         context = super().get_context_data(**kwargs)
         invoice = self.get_object()
-        context["customer_email"] = invoice.contacts.get("Contact Info").get("email", None)
-        context["customer_phone"] = invoice.contacts.get("Contact Info").get("phone", None)
+        context["customer_email"] = invoice.contacts.get("Contact Info").get(
+            "email", None
+        )
+        context["customer_phone"] = invoice.contacts.get("Contact Info").get(
+            "phone", None
+        )
         return context
 
 
