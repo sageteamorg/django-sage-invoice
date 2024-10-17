@@ -1,15 +1,28 @@
 # Django Sage Invoice
 
-Django Sage Invoice is a Django application for managing invoices. It provides a robust admin interface to create, view, and manage invoices and their related components like categories, items, and totals.
+Django Sage Invoice is a Django application for managing invoices, designed to provide essential features required for small businesses to issue invoices, track payments, and manage customer information. The focus of this initial phase is on simplicity and functionality, ensuring that businesses can use the system without being overwhelmed by advanced or complex features.
 
-## Features
+The system offers a robust admin interface to create, view, and manage invoices along with their related components, such as categories, items, and totals. The primary objectives are to ensure that businesses can efficiently issue invoices, monitor payment status, and handle basic customer management tasks, making it an accessible solution for small-scale operations.
 
-- Create and manage invoices with detailed customer information.
-- Customize invoices with logos, backgrounds, signatures, and stamps.
-- Add custom columns to each invoice for additional information.
-- Generate invoice totals automatically, including tax and discount calculations.
-- Export invoices as HTML files bundled in a ZIP archive.
-- Choose from predefined templates or define your own.
+#### **Key Features:**
+
+1. **Basic Invoicing**
+   - Create and send professional invoices manually.
+   - Customizable invoice templates with basic branding (logo, company info).
+   - Invoice status tracking (draft, sent, paid).
+2. **Customer Management**
+   - Add and manage customer profiles.
+   - Support for basic customer contact and billing information.
+3. **Basic Payments Tracking**
+   - Manual recording of payments (bank transfer, cash).
+   - Partial payments support.
+4. **Basic Tax Support**
+   - Add tax rates manually (VAT, GST, etc.).
+   - Apply taxes to invoices and show breakdown.
+5. **Basic Reports**
+   - Export invoices in PDF format.
+   - Basic reporting on unpaid/paid invoices.
+
 
 ## Installation
 
