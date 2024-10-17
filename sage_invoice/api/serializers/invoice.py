@@ -1,12 +1,11 @@
 from rest_framework import serializers
 
-from sage_invoice.api.serializers import (
-    CategorySerializer,
-    ColumnSerializer,
-    ExpenseSerializer,
-    ItemSerializer,
-)
-from sage_invoice.models import Category, Invoice
+from .category import CategorySerializer
+from .column import ColumnSerializer
+from .item import ItemSerializer
+from .expense import ExpenseSerializer
+
+from sage_invoice.models import Invoice
 
 
 class ContactFieldSerializer(serializers.Serializer):
