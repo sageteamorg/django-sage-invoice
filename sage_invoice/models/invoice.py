@@ -111,7 +111,7 @@ class Invoice(TitleSlugMixin):
     category = models.ForeignKey(
         "Category",
         on_delete=models.CASCADE,
-        related_name="category",
+        related_name="invoices",
         null=True,
         blank=True,
         verbose_name=_("Category"),
