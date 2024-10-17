@@ -7,10 +7,10 @@ from django.conf import settings
 class JinjaTemplateDiscovery:
     def __init__(self):
         self.default_template_dir = "default_invoices"  # inside package
-        self.custom_template_dir = (
+        self.sage_template_dir = (
             settings.SAGE_MODEL_TEMPLATE
         )  # custom templates folder name
-        self.custom_template_prefix = (
+        self.sage_template_prefix = (
             settings.SAGE_MODEL_PREFIX
         )  # custom template prefix
 
@@ -29,12 +29,12 @@ class JinjaTemplateDiscovery:
         template_choices = []
         for app_config in apps.get_app_configs():
             template_dir = os.path.join(
-                app_config.path, "templates", self.custom_template_dir
+                app_config.path, "templates", self.sage_template_dir
             )
             if os.path.exists(template_dir):
                 template_choices.extend(
                     self._find_templates_in_directory(
-                        template_dir, self.custom_template_prefix
+                        template_dir, self.sage_template_prefix
                     )
                 )
         return template_choices
@@ -42,15 +42,17 @@ class JinjaTemplateDiscovery:
     def _find_templates_in_directory(self, directory, prefix=None):
         """
         Helper method to find .jinja2 files in a directory, optionally filtering by
-        prefix.
+        prefix, and return the filenames without the .jinja2 extension.
         """
         if not os.path.exists(directory):
             return []
 
         templates = []
         for filename in os.listdir(directory):
-            if filename.endswith(".jinja2"):
-                # Match filenames that start with the prefix (case-insensitive)
-                if prefix is None or filename.lower().startswith(prefix.lower()):
-                    templates.append(filename)
-        return templates
+            if filename.endswith(".jinja2") and (not prefix or filename.startswith(prefix)):
+                templates.append(filename)
+
+        # Remove the .jinja2 extension from the filenames
+        filenames = list(map(lambda x: x.replace('.jinja2', ''), templates))
+        
+        return filenames

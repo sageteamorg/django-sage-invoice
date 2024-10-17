@@ -22,18 +22,16 @@ class QuotationService:
         Jinja2.
         """
         logger.info("Initializing QuotationService")
-        self.template_discovery = JinjaTemplateDiscovery(
-            models_dir=getattr(settings, "SAGE_MODEL_TEMPLATE", "default_invoices")
-        )
+        self.template_discovery = JinjaTemplateDiscovery()
         self.env = Environment(
-            loader=FileSystemLoader(self.template_discovery.models_dir),
+            loader=FileSystemLoader(self.template_discovery.sage_template_dir),
             autoescape=select_autoescape(
                 ["html", "xml"]
             ),  # Enable autoescape for HTML and XML templates
         )
         logger.info(
             "Template discovery set to directory: %s",
-            self.template_discovery.models_dir,
+            self.template_discovery.sage_template_dir,
         )
 
     def render_quotation(self, queryset: QuerySet) -> str:
@@ -50,7 +48,7 @@ class QuotationService:
         """
         logger.info("Rendering quotation")
         invoice = queryset.first()
-        context = self.render_contax(queryset)
+        context = self.render_context(queryset)
         is_receipt = invoice.receipt
         template_number = "".join(filter(str.isdigit, invoice.template_choice))
         logger.info("Selected template number: %s", template_number)
@@ -65,7 +63,7 @@ class QuotationService:
 
         return template.render(context)
 
-    def render_contax(self, queryset: QuerySet) -> Dict[str, Any]:
+    def render_context(self, queryset: QuerySet) -> Dict[str, Any]:
         """Prepare the context data for rendering a quotation.
 
         Args:
