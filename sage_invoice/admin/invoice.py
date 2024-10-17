@@ -14,7 +14,7 @@ class ItemInline(admin.TabularInline):
     readonly_fields = ("total_price",)
 
 
-class ColumnInline(admin.TabularInline):
+class ColumnInline(admin.StackedInline):
     model = Column
     extra = 1
 

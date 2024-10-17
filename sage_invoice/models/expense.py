@@ -73,7 +73,7 @@ class Expense(models.Model):
         "Invoice",
         verbose_name=_("Invoice"),
         on_delete=models.CASCADE,
-        related_name="total",
+        related_name="expense",
         help_text=_("The invoice associated with this total."),
         db_comment="Reference to the associated invoice",
     )

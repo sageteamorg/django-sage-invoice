@@ -1,46 +1,43 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.template.loader import render_to_string
 from django.views import View
-from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.generic import TemplateView, DetailView
+from django.template.loader import render_to_string
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from sage_invoice.helpers.funcs import get_template_choices
 from sage_invoice.models import Invoice
 from sage_invoice.service.invoice_create import QuotationService
 
 
-class InvoiceDetailView(LoginRequiredMixin, TemplateView):
-    template_name = ""
-    permission_denied_message = (
-        "No access - You do not have permission to view this page."
-    )
+class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Invoice
+    context_object_name = "invoice"
+    queryset = Invoice.objects.select_related("category", "expense").prefetch_related("items", "columns")
 
-    # Define where to redirect the user if not authenticated
-    login_url = "admin/login/"  # Replace with your actual login URL
+    def test_func(self):
+        # Ensure that the user is a staff member
+        return self.request.user.is_staff
 
-    def dispatch(self, request, *args, **kwargs):
-        # Check if the user is staff before rendering the page
-        if not request.user.is_staff:
-            raise PermissionDenied()
+    def handle_no_permission(self):
+        # If the user is not authenticated, it will redirect to login
+        # If the user is authenticated but lacks permission, it raises PermissionDenied
+        if self.request.user.is_authenticated:
+            raise PermissionDenied(self.permission_denied_message)
+        return super().handle_no_permission()
 
-        return super().dispatch(request, *args, **kwargs)
+    def get_template_names(self):
+        # Dynamically select the template based on the invoice type
+        invoice = self.get_object()
+        return [f"{invoice.template_choice}.html"]
 
     def get_context_data(self, **kwargs):
+        # Add additional context using the service class
         context = super().get_context_data(**kwargs)
-        invoice_slug = self.kwargs.get("slug")
-        invoice = Invoice.objects.filter(slug=invoice_slug).first()
-        service = QuotationService()
-        rendered_content = service.render_context(invoice)
-        context.update(rendered_content)
-
-        # Dynamically choose the template based on invoice type and choice
-        if invoice.receipt:
-            self.template_name = f"{invoice.template_choice}.html"
-        else:
-            self.template_name = f"{invoice.template_choice}.html"
-
+        invoice = self.get_object()
+        context["customer_email"] = invoice.contacts.get("Contact Info").get("email", None)
+        context["customer_phone"] = invoice.contacts.get("Contact Info").get("phone", None)
         return context
 
 

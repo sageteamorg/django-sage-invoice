@@ -11,7 +11,8 @@ class Item(models.Model):
     )
     quantity = models.PositiveIntegerField(
         verbose_name=_("Quantity"),
-        default=1,
+        null=True,
+        blank=True,
         help_text=_("The quantity of the item."),
         db_comment="The quantity of the invoice item",
     )
@@ -49,7 +50,10 @@ class Item(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        self.total_price = self.quantity * self.unit_price
+        if self.quantity:
+            self.total_price = self.quantity * self.unit_price
+        else:
+            self.total_price = self.unit_price
         super().save(*args, **kwargs)
 
     def __str__(self):
