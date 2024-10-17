@@ -4,7 +4,7 @@ requires = [ "poetry-core" ]
 
 [tool.poetry]
 name = "django-sage-invoice"
-version = "0.1.4"
+version = "0.1.5"
 description = "A project for invoice generation and NFC integration."
 authors = [ "Radin Ghahremani <radin@sageteam.org>", "Sepehr Akbarzadeh <sepehr@sageteam.org>" ]
 keywords = [ "django", "invoice", "sageteam", "django-packages" ]
