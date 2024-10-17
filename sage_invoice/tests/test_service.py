@@ -19,7 +19,7 @@ class TestQuotationService:
         assert service.template_discovery == mock_template_discovery.return_value
         assert service.env is not None
         mock_template_discovery.assert_called_once_with(
-            models_dir="sage_invoice"  # Default directory
+            sage_template_dir="sage_invoice"  # Default directory
         )
 
     @pytest.fixture
@@ -90,13 +90,13 @@ class TestQuotationService:
 
         mock_get_template_path.assert_called_once()
 
-    def test_render_contax(self, invoice):
+    def test_render_context(self, invoice):
         # Test context generation for the invoice
         service = QuotationService()
 
         # Ensure contacts and other fields are handled correctly
         invoice.contacts = ["you@example.com", "1234567890"]
-        context = service.render_contax(invoice)
+        context = service.render_context(invoice)
 
         assert context["title"] == invoice.title
         assert context["tracking_code"] == invoice.tracking_code

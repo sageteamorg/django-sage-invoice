@@ -32,14 +32,14 @@ class InvoiceDetailView(LoginRequiredMixin, TemplateView):
         invoice_slug = self.kwargs.get("slug")
         invoice = Invoice.objects.filter(slug=invoice_slug).first()
         service = QuotationService()
-        rendered_content = service.render_contax(invoice)
+        rendered_content = service.render_context(invoice)
         context.update(rendered_content)
 
         # Dynamically choose the template based on invoice type and choice
         if invoice.receipt:
-            self.template_name = f"receipt{invoice.template_choice}.html"
+            self.template_name = f"{invoice.template_choice}.html"
         else:
-            self.template_name = f"quotation{invoice.template_choice}.html"
+            self.template_name = f"{invoice.template_choice}.html"
 
         return context
 
@@ -79,7 +79,7 @@ class GenerateInvoicesView(TemplateView):
                 continue
 
             service = QuotationService()
-            rendered_content = service.render_contax(invoice)
+            rendered_content = service.render_context(invoice)
 
             # Determine the template based on invoice type
             if invoice.receipt:
