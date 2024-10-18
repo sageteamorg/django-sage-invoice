@@ -140,6 +140,12 @@ class Invoice(TitleSlugMixin):
     class Meta:
         verbose_name = _("Invoice")
         verbose_name_plural = _("Invoices")
+        permissions = [
+            ("mark_as_paid", _("Grants mark invoices as paid")),
+            ("mark_as_unpaid", _("Grants Can mark invoices as unpaid")),
+            ("apply_discount", _("Grants apply discounts to invoices")),
+            ("reject_invoice", _("Grants reject invoices")),
+        ]
         db_table = "sage_invoice"
 
     def __str__(self):
