@@ -15,12 +15,6 @@ class Invoice(TitleSlugMixin):
         help_text=_("The date when the invoice was created."),
         db_comment="Invoice date created",
     )
-    customer_name = models.CharField(
-        max_length=255,
-        verbose_name=_("Customer Name"),
-        help_text=_("The name of the customer."),
-        db_comment="Customer name created",
-    )
     tracking_code = models.CharField(
         max_length=255,
         verbose_name=_("Tracking Code"),
@@ -29,47 +23,10 @@ class Invoice(TitleSlugMixin):
         ),
         db_comment="Tracking code created",
     )
-    contacts = JSONField(
-        verbose_name="Customer Contacts",
-        blank=True,
-        null=True,
-        schema={
-            "type": "object",
-            "properties": {
-                "Contact Info": {
-                    "oneOf": [
-                        {
-                            "type": "object",
-                            "title": "Phone",
-                            "properties": {
-                                "phone": {
-                                    "type": "string",
-                                    "pattern": "^[0-9]+$",
-                                    "title": "Phone",
-                                    "placeholder": "1234567890",
-                                }
-                            },
-                        },
-                        {
-                            "type": "object",
-                            "title": "Email",
-                            "properties": {
-                                "email": {
-                                    "type": "string",
-                                    "format": "email",
-                                    "title": "Email",
-                                    "placeholder": "you@example.com",
-                                }
-                            },
-                        },
-                    ]
-                }
-            },
-        },
-    )
+    
     status = models.CharField(
         max_length=50,
-        choices=InvoiceStatus,
+        choices=InvoiceStatus.choices,
         verbose_name=_("Status"),
         help_text=_("The current status of the invoice (Paid, Unpaid)."),
         db_comment="Current status of the invoice (Paid, Unpaid)",
@@ -164,9 +121,15 @@ class Invoice(TitleSlugMixin):
     )
 
     def clean(self):
-        if self.due_date < self.invoice_date:
-            raise ValidationError(_("Due Date must be later than Invoice Date."))
-        if len(self.tracking_code) <= 10:
+        # Ensure both `due_date` and `invoice_date` are set before comparing them
+        if self.due_date and self.invoice_date:
+            if self.due_date < self.invoice_date:
+                raise ValidationError(_("Due Date must be later than Invoice Date."))
+        else:
+            raise ValidationError(_("Both Due Date and Invoice Date must be provided."))
+
+        # Ensure tracking code length is valid
+        if self.tracking_code and len(self.tracking_code) <= 10:
             self.tracking_code = generate_tracking_code(
                 self.tracking_code, self.invoice_date
             )

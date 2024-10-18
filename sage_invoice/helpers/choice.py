@@ -2,6 +2,28 @@ from django.db import models
 
 
 class InvoiceStatus(models.TextChoices):
+    """
+    This class defines the possible statuses for an invoice in the system.
+
+    - **DRAFT**: The invoice is saved but has not yet been sent to the customer. 
+        This is the initial state when an invoice is being created and hasn't been 
+        finalized or issued.
+
+    - **OVERDUE**: The invoice was sent, but the payment due date has passed, and 
+        payment has not been received. It indicates that the customer is late in making 
+        the payment.
+
+    - **PAID**: The invoice has been fully paid by the customer. No further action is 
+        required from either party.
+
+    - **UNPAID**: The invoice has been sent to the customer (via email or manual download). 
+        It has not been paid yet, but it is now awaiting customer action. The invoice 
+        is still pending and has not yet been paid. This status includes invoices that
+        are still within  the payment period and those that might require follow-up 
+        (before they become overdue).
+    """
+    DRAFT = ("draft", "DRAFT")
+    OVERDUE = ("overdue", "OVERDUE")
     PAID = ("paid", "PAID")
     UNPAID = ("unpaid", "UNPAID")
 
