@@ -86,6 +86,8 @@ Add `django-sage-invoice` to your `INSTALLED_APPS` in the Django settings and co
 ```python
 INSTALLED_APPS = [
     # other packages
+    "django_jsonform",
+    "import_export",
     "sage_tools",
     "sage_invoice",
 ]
