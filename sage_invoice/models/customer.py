@@ -111,7 +111,7 @@ class CustomerProfile(models.Model):
     )
 
     def __str__(self):
-        return f"{self.customer_name} ({self.company_name})" if self.company_name else self.customer_name
+        return f"{self.name} ({self.company_name})" if self.company_name else self.name
 
     class Meta:
         verbose_name = _("Customer Profile")
