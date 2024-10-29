@@ -38,10 +38,10 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         # Add additional context using the service class
         context = super().get_context_data(**kwargs)
         invoice = self.get_object()
-        context["customer_email"] = invoice.contacts.get("Contact Info").get(
+        context["customer_email"] = invoice.customer.contact.get("Contact Info").get(
             "email", None
         )
-        context["customer_phone"] = invoice.contacts.get("Contact Info").get(
+        context["customer_phone"] = invoice.customer.contact.get("Contact Info").get(
             "phone", None
         )
         return context
