@@ -41,6 +41,7 @@ class InvoiceSerializer(serializers.HyperlinkedModelSerializer):
         child=serializers.DictField(child=serializers.CharField()), required=False
     )
     category = CategorySerializer(read_only=True)
+    customer_name = serializers.CharField(source="customer.name")
     items = ItemSerializer(many=True, read_only=True)
     columns = ColumnSerializer(many=True, read_only=True)
     expense = ExpenseSerializer(read_only=True)
@@ -70,7 +71,7 @@ class InvoiceSerializer(serializers.HyperlinkedModelSerializer):
         ]
         extra_kwargs = {
             "url": {"lookup_field": "slug"},
-            "categories": {"lookup_field": "slug"},
+            "category": {"lookup_field": "slug"},
             "items": {"lookup_field": "id"},
             "columns": {"lookup_field": "id"},
             "expense": {"lookup_field": "id"},

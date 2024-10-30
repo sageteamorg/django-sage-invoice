@@ -9,6 +9,7 @@ from sage_invoice.models import Category
 class CategoryViewSet(ErrorHandlingMixin, viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    lookup_field = "slug"
 
     versioning_class = HeaderVersioning
 
