@@ -7,14 +7,14 @@ from django.conf import settings
 from sage_invoice.service.discovery import JinjaTemplateDiscovery
 
 
-def get_template_choices():
+def get_template_choices(is_receipt=False):
     """
     Returns a combined list of default and custom templates, formatted for use in a
-    model's choices field.
+    model's choices field, filtered by the `is_receipt` flag.
     """
     discovery = JinjaTemplateDiscovery()
-    default_templates = discovery.get_default_templates()
-    custom_templates = discovery.get_custom_templates()
+    default_templates = discovery.get_default_templates(is_receipt=is_receipt)
+    custom_templates = discovery.get_custom_templates(is_receipt=is_receipt)
 
     choices = [(template, template) for template in default_templates]
     choices += [(template, template) for template in custom_templates]
