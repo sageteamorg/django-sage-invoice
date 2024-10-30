@@ -7,7 +7,7 @@ from sage_invoice.models import Category
 
 
 class CategoryViewSet(ErrorHandlingMixin, viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.prefetch_related("invoices").all()
     serializer_class = CategorySerializer
     lookup_field = "slug"
 

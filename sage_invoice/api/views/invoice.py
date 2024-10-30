@@ -16,7 +16,9 @@ from sage_invoice.models import Column, Expense, Invoice, Item
 
 
 class InvoiceViewSet(ErrorHandlingMixin, viewsets.ModelViewSet):
-    queryset = Invoice.objects.all()
+    queryset = Invoice.objects.select_related("category", "expense", "customer").prefetch_related("category__invoices",
+        "items__invoice", "columns__item"
+    ).all()
     serializer_class = InvoiceSerializer
     lookup_field = "slug"
     versioning_class = HeaderVersioning
