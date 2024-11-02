@@ -8,6 +8,9 @@ from django.core.checks import Error, register
 def check_installed_apps(app_configs, **kwargs):
     errors = []
     required_apps = [
+        "django.contrib.humanize",
+        "django_jsonform",
+        "import_export",
         "sage_invoice",
     ]
 
@@ -29,6 +32,8 @@ def check_installed_apps(app_configs, **kwargs):
 def check_required_libraries(app_configs, **kwargs):
     errors = []
     required_libraries = [
+        "django_jsonform",
+        "import_export",
         "sage_invoice",
     ]
 
