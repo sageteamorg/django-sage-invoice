@@ -6,7 +6,7 @@ from sage_invoice.models import Expense
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
-    queryset = Expense.objects.all()
+    queryset = Expense.objects.select_related("invoice").all()
     serializer_class = ExpenseSerializer
     lookup_field = "id"
     lookup_url_kwarg = "id"
