@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DJANGO_SETTINGS_MODULE: sage_invoice.tests.testapp.settings.settings
       PYTHONPATH: ${{ github.workspace }}
 
     strategy:
@@ -34,7 +35,7 @@ jobs:
           pip install -r requirements/requirements-dev.txt
 
       - name: Run tests with coverage
-        run: pytest --cov=iranian_cities --cov-report=xml
+        run: pytest --cov=sage_invoice --cov-report=xml
 
       - name: Run Tox tests
         run: tox
