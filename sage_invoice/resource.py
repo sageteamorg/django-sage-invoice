@@ -292,4 +292,4 @@ class InvoiceResource(resources.ModelResource):
 
     def dehydrate_contacts(self, invoice):
         """Export contacts JSON field."""
-        return json.dumps(invoice.contacts)
+        return json.dumps(invoice.customer.contact)
